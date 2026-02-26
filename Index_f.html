@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Movement Perception Study</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e0e10;
+    --surface: #18181c;
+    --surface2: #222228;
+    --border: #2e2e38;
+    --text: #f0eff4;
+    --text-muted: #8884a0;
+    --accent: #c8b8ff;
+    --accent2: #7c6fcd;
+    --gentle: #7eb8e0;
+    --rude: #e07070;
+    --radius: 12px;
+    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(124,111,205,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 80%, rgba(200,184,255,0.05) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .screen {
+    display: none;
+    width: 100%;
+    max-width: 680px;
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.5s ease forwards;
+  }
+  .screen.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 48px;
+  }
+
+  @media (max-width: 540px) {
+    .card { padding: 28px 20px; }
+  }
+
+  .label-small {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 12px;
+  }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 400;
+    line-height: 1.2;
+    margin-bottom: 24px;
+    color: var(--text);
+  }
+
+  h1 em { font-style: italic; color: var(--accent); }
+
+  p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #c4c2d4;
+    margin-bottom: 16px;
+  }
+
+  .consent-box {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin: 28px 0;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #b0aec4;
+  }
+
+  .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+
+  .radio-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    color: #c4c2d4;
+  }
+
+  .radio-option:hover { border-color: var(--accent2); background: rgba(124,111,205,0.06); }
+  .radio-option.selected { border-color: var(--accent); background: rgba(200,184,255,0.08); color: var(--text); }
+  .radio-option input { display: none; }
+
+  .radio-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    flex-shrink: 0;
+    transition: var(--transition);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .radio-option.selected .radio-dot { border-color: var(--accent); background: var(--accent); }
+  .radio-option.selected .radio-dot::after {
+    content: '';
+    width: 6px; height: 6px;
+    background: var(--bg);
+    border-radius: 50%;
+  }
+
+  .field { margin-bottom: 28px; }
+  .field label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 0.05em; }
+
+  input[type="number"] {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: var(--transition);
+  }
+  input[type="number"]:focus { border-color: var(--accent2); }
+  input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 32px;
+    border-radius: 100px;
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    letter-spacing: 0.03em;
+  }
+
+  .btn-primary { background: var(--accent); color: #1a1828; }
+  .btn-primary:hover { background: #d8caff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,184,255,0.2); }
+  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
+  .btn-outline:hover { border-color: var(--accent2); color: var(--text); }
+
+  .btn-row { display: flex; justify-content: flex-end; margin-top: 36px; gap: 12px; }
+
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent2), var(--accent));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .video-counter { font-size: 12px; letter-spacing: 0.1em; color: var(--text-muted); text-align: right; margin-bottom: 20px; }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: #000;
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 36px;
+  }
+  .video-wrapper video { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+  .video-placeholder {
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+  }
+  .video-placeholder svg { opacity: 0.4; }
+
+  /* SLIDER */
+  .slider-section { margin-bottom: 32px; }
+  .slider-labels { display: flex; justify-content: space-between; margin-bottom: 12px; }
+  .slider-label { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; }
+  .slider-label.gentle { color: var(--gentle); }
+  .slider-label.rude   { color: var(--rude); }
+  .slider-track { position: relative; height: 44px; display: flex; align-items: center; }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+    background: linear-gradient(to right, #57a3d6 0%, #9ec7e3 20%, #e8e8ee 50%, #e79898 80%, #e05b5b 100%);
+    border: none;
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.4), 0 4px 12px rgba(0,0,0,0.6);
+    cursor: grab;
+    transition: box-shadow 0.2s, transform 0.1s;
+  }
+  input[type="range"]:active::-webkit-slider-thumb {
+    cursor: grabbing;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.6), 0 4px 16px rgba(0,0,0,0.7);
+    transform: scale(1.15);
+  }
+  input[type="range"]::-moz-range-track {
+    height: 8px; border-radius: 4px;
+    background: linear-gradient(to right, #57a3d6 0%, #9ec7e3 20%, #e8e8ee 50%, #e79898 80%, #e05b5b 100%);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
+    cursor: grab;
+  }
+
+  .gate-icon {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: rgba(200,184,255,0.1);
+    border: 1px solid var(--accent2);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 28px;
+    font-size: 28px;
+  }
+
+  .preload-bar { margin: 24px 0; }
+  .preload-text { font-size: 13px; color: var(--text-muted); text-align: center; margin-top: 12px; }
+  .thank-icon { font-size: 48px; text-align: center; margin-bottom: 24px; }
+  .divider { height: 1px; background: var(--border); margin: 28px 0; }
+  .error-msg { font-size: 12px; color: var(--rude); margin-top: 8px; display: none; }
+  .error-msg.visible { display: block; }
+  .required-note { font-size: 12px; color: var(--text-muted); margin-top: 24px; }
+
+  /* LANGUAGE PICKER */
+  .lang-picker {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 36px;
+  }
+  .lang-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 24px 40px;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface2);
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-muted);
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .lang-btn:hover {
+    border-color: var(--accent);
+    background: rgba(200,184,255,0.08);
+    color: var(--text);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(200,184,255,0.12);
+  }
+  .lang-flag { font-size: 36px; line-height: 1; }
+</style>
+</head>
+<body>
+
+<!-- SCREEN 0: LANGUAGE -->
+<div class="screen active" id="screen-lang">
+  <div class="card" style="text-align:center;">
+    <div class="label-small">Movement Perception Study</div>
+    <h1>Choose your <em>language</em></h1>
+    <p style="color:var(--text-muted); font-size:14px; margin-bottom:0;">Seleziona la lingua / Select your language</p>
+    <div class="lang-picker">
+      <button class="lang-btn" onclick="setLanguage('en')">
+        <span class="lang-flag">🇬🇧</span>
+        English
+      </button>
+      <button class="lang-btn" onclick="setLanguage('it')">
+        <span class="lang-flag">🇮🇹</span>
+        Italiano
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 1: CONSENT -->
+<div class="screen" id="screen-consent">
+  <div class="card">
+    <div class="label-small" id="t-study-label"></div>
+    <h1 id="t-consent-title"></h1>
+    <div class="consent-box" id="t-consent-box"></div>
+    <div class="radio-group">
+      <label class="radio-option" onclick="selectRadio(this,'consent','agree')">
+        <input type="radio" name="consent" value="agree">
+        <span class="radio-dot"></span>
+        <span id="t-agree"></span>
+      </label>
+      <label class="radio-option" onclick="selectRadio(this,'consent','disagree')">
+        <input type="radio" name="consent" value="disagree">
+        <span class="radio-dot"></span>
+        <span id="t-disagree"></span>
+      </label>
+    </div>
+    <p class="error-msg" id="consent-error"></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitConsent()" id="t-continue-consent"></button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 1b: DECLINED -->
+<div class="screen" id="screen-declined">
+  <div class="card" style="text-align:center;">
+    <div class="thank-icon">🙏</div>
+    <h1 id="t-declined-title"></h1>
+    <p id="t-declined-body"></p>
+  </div>
+</div>
+
+<!-- SCREEN 2: DEMOGRAPHICS -->
+<div class="screen" id="screen-demo">
+  <div class="card">
+    <div class="label-small" id="t-step1"></div>
+    <h1 id="t-demo-title"></h1>
+
+    <div class="field">
+      <label id="t-age-label"></label>
+      <input type="number" id="age" min="18" max="120">
+      <p class="error-msg" id="age-error"></p>
+    </div>
+
+    <div class="field">
+      <label id="t-gender-label"></label>
+      <div class="radio-group">
+        <label class="radio-option" onclick="selectRadio(this,'gender','female')">
+          <input type="radio" name="gender" value="female"><span class="radio-dot"></span><span id="t-female"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'gender','male')">
+          <input type="radio" name="gender" value="male"><span class="radio-dot"></span><span id="t-male"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'gender','other')">
+          <input type="radio" name="gender" value="other"><span class="radio-dot"></span><span id="t-other"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'gender','prefer_not')">
+          <input type="radio" name="gender" value="prefer_not"><span class="radio-dot"></span><span id="t-prefernot"></span>
+        </label>
+      </div>
+      <p class="error-msg" id="gender-error"></p>
+    </div>
+
+    <div class="field">
+      <label id="t-dance-label"></label>
+      <div class="radio-group">
+        <label class="radio-option" onclick="selectRadio(this,'dance','no')">
+          <input type="radio" name="dance" value="no"><span class="radio-dot"></span><span id="t-dance-no"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'dance','amateur')">
+          <input type="radio" name="dance" value="amateur"><span class="radio-dot"></span><span id="t-dance-amateur"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'dance','pre_prof')">
+          <input type="radio" name="dance" value="pre_prof"><span class="radio-dot"></span><span id="t-dance-preprof"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'dance','professional')">
+          <input type="radio" name="dance" value="professional"><span class="radio-dot"></span><span id="t-dance-prof"></span>
+        </label>
+      </div>
+      <p class="error-msg" id="dance-error"></p>
+    </div>
+
+    <div class="field" id="years-field" style="display:none;">
+      <label id="t-years-label"></label>
+      <div class="radio-group">
+        <label class="radio-option" onclick="selectRadio(this,'years','lt1')">
+          <input type="radio" name="years" value="lt1"><span class="radio-dot"></span><span id="t-yr-lt1"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'years','1to3')">
+          <input type="radio" name="years" value="1to3"><span class="radio-dot"></span><span id="t-yr-1to3"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'years','4to7')">
+          <input type="radio" name="years" value="4to7"><span class="radio-dot"></span><span id="t-yr-4to7"></span>
+        </label>
+        <label class="radio-option" onclick="selectRadio(this,'years','8plus')">
+          <input type="radio" name="years" value="8plus"><span class="radio-dot"></span><span id="t-yr-8plus"></span>
+        </label>
+      </div>
+      <p class="error-msg" id="years-error"></p>
+    </div>
+
+    <p class="required-note" id="t-required"></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="submitDemo()" id="t-continue-demo"></button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 3: INSTRUCTIONS -->
+<div class="screen" id="screen-instructions">
+  <div class="card">
+    <div class="label-small" id="t-step2"></div>
+    <h1 id="t-instr-title"></h1>
+    <p id="t-instr-p1"></p>
+    <p id="t-instr-p2"></p>
+    <p id="t-instr-p3"></p>
+    <div class="divider"></div>
+    <p style="font-size:13px; color:var(--text-muted);" id="t-instr-note"></p>
+    <div class="btn-row">
+      <button class="btn btn-primary" onclick="goToGate()" id="t-ready"></button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 4: GATE -->
+<div class="screen" id="screen-gate">
+  <div class="card" style="text-align:center;">
+    <div class="gate-icon">▶</div>
+    <div class="label-small" id="t-step3"></div>
+    <h1 id="t-gate-title"></h1>
+    <p id="t-gate-body"></p>
+    <div class="btn-row" style="justify-content:center; margin-top:32px;">
+      <button class="btn btn-primary" onclick="startTask()" style="padding:16px 48px; font-size:15px;" id="t-start"></button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 5: PRELOAD -->
+<div class="screen" id="screen-preload">
+  <div class="card" style="text-align:center;">
+    <div class="label-small" id="t-loading"></div>
+    <h1 id="t-preload-title"></h1>
+    <p id="t-preload-body"></p>
+    <div class="preload-bar">
+      <div class="progress-bar" style="margin-bottom:0;">
+        <div class="progress-fill" id="preload-fill" style="width:0%"></div>
+      </div>
+    </div>
+    <p class="preload-text" id="preload-text"></p>
+  </div>
+</div>
+
+<!-- SCREEN 6: TASK -->
+<div class="screen" id="screen-task">
+  <div class="card">
+    <div class="progress-bar">
+      <div class="progress-fill" id="task-progress" style="width:0%"></div>
+    </div>
+    <div class="video-counter" id="video-counter"></div>
+    <div class="video-wrapper" id="video-wrapper"></div>
+    <div class="slider-section">
+      <div class="slider-labels">
+        <span class="slider-label gentle" id="t-label-gentle"></span>
+        <span class="slider-label rude" id="t-label-rude"></span>
+      </div>
+      <div class="slider-track">
+        <input type="range" id="rating-slider" min="0" max="100" value="50" ontouchstart="unlockSlider()">
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="confirm-btn" onclick="confirmRating()">
+        <span id="t-confirm"></span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN 7: THANK YOU -->
+<div class="screen" id="screen-thanks">
+  <div class="card" style="text-align:center;">
+    <div class="thank-icon">✦</div>
+    <div class="label-small" id="t-complete"></div>
+    <h1 id="t-thanks-title"></h1>
+    <p id="t-thanks-body"></p>
+    <div class="divider"></div>
+    <p style="font-size:13px; color:var(--text-muted);" id="t-close"></p>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TRANSLATIONS
+// ============================================================
+const TRANSLATIONS = {
+  en: {
+    'study-label':      'Movement Perception Study',
+    'consent-title':    'Before we <em>begin</em>',
+    'consent-box':      'The present study is conducted in accordance with the Ethics Committee of the University of Turin. The collected data will be processed in accordance with privacy regulations (Pursuant to EU Regulation 2016/679, the General Data Protection Regulation (GDPR), concerning the protection of natural persons with regard to the processing of personal data and the free movement of such data.). No personal data will be disclosed.<br><br>Please confirm that you agree to take part in the study.',
+    'agree':            'I agree',
+    'disagree':         'I do not agree',
+    'consent-error':    'Please select an option to continue.',
+    'continue-consent': 'Continue →',
+    'declined-title':   'Thank you for your time',
+    'declined-body':    'You have chosen not to participate in this study. You may close this window.',
+    'step1':            'Step 1 of 3',
+    'demo-title':       'A few questions <em>about you</em>',
+    'age-label':        'How old are you?',
+    'age-placeholder':  'Your age',
+    'age-error':        'Please enter a valid age (18–120).',
+    'gender-label':     'What is your gender?',
+    'gender-error':     'Please select an option.',
+    'female':           'Female',
+    'male':             'Male',
+    'other':            'Other',
+    'prefernot':        'Prefer not to say',
+    'dance-label':      'Have you ever practiced dance?',
+    'dance-error':      'Please select an option.',
+    'dance-no':         'No',
+    'dance-amateur':    'Yes, in an amateur context',
+    'dance-preprof':    'Yes, at a pre-professional level',
+    'dance-prof':       'Yes, at a professional level',
+    'years-label':      'How many years have you practiced dance?',
+    'years-error':      'Please select an option.',
+    'yr-lt1':           'Less than 1 year',
+    'yr-1to3':          '1 to 3 years',
+    'yr-4to7':          '4 to 7 years',
+    'yr-8plus':         '8 or more years',
+    'required':         'All fields are required.',
+    'continue-demo':    'Continue →',
+    'step2':            'Step 2 of 3',
+    'instr-title':      'What you\'ll <em>do</em>',
+    'instr-p1':         'You will watch a series of short dance video clips. Each clip lasts approximately 1–2 seconds and will loop continuously while you make your rating.',
+    'instr-p2':         'After each video, move the slider to indicate which feelings this movement evokes in you — from <strong style="color:var(--gentle)">Gentle</strong> on the left to <strong style="color:var(--rude)">Rude</strong> on the right.',
+    'instr-p3':         'There are no right or wrong answers. We are interested in your spontaneous, personal perception. Please rate each video independently.',
+    'instr-note':       'The study should take no more than 10 minutes to be completed. Please make sure you are in a quiet and comfortable room.',
+    'ready':            'I\'m ready →',
+    'step3':            'Step 3 of 3 — Task',
+    'gate-title':       'Ready to <em>start</em>?',
+    'gate-body':        'Videos will begin playing automatically. Tap the button below to start the task.',
+    'start':            'Start Task',
+    'loading':          'Loading',
+    'preload-title':    'Preparing your <em>videos</em>…',
+    'preload-body':     'Please wait while we load all video clips. This ensures smooth playback throughout the task.',
+    'label-gentle':     '← Gentle',
+    'label-rude':       'Rude →',
+    'confirm':          'Confirm rating →',
+    'complete':         'Study complete',
+    'thanks-title':     'Thank you for <em>participating</em>',
+    'thanks-body':      'Your responses have been recorded. Your contribution is valuable to our research on dance perception.',
+    'close':            'You may now close this window.',
+    'video-of':         'Video {n} of {total}',
+    'loaded-of':        '{n} / {total} loaded',
+  },
+  it: {
+    'study-label':      'Studio sulla Percezione del Movimento',
+    'consent-title':    'Prima di <em>iniziare</em>',
+    'consent-box':      'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.',
+    'agree':            'Acconsento',
+    'disagree':         'Non acconsento',
+    'consent-error':    'Seleziona un\'opzione per continuare.',
+    'continue-consent': 'Continua →',
+    'declined-title':   'Grazie per il tuo tempo',
+    'declined-body':    'Hai scelto di non partecipare a questo studio. Puoi chiudere questa finestra.',
+    'step1':            'Passo 1 di 3',
+    'demo-title':       'Alcune domande <em>su di te</em>',
+    'age-label':        'Quanti anni hai?',
+    'age-placeholder':  'La tua età',
+    'age-error':        'Inserisci un\'età valida (18–120).',
+    'gender-label':     'Qual è il tuo genere?',
+    'gender-error':     'Seleziona un\'opzione.',
+    'female':           'Femmina',
+    'male':             'Maschio',
+    'other':            'Altro',
+    'prefernot':        'Preferisco non rispondere',
+    'dance-label':      'Hai mai praticato danza?',
+    'dance-error':      'Seleziona un\'opzione.',
+    'dance-no':         'No',
+    'dance-amateur':    'Sì, in un contesto amatoriale',
+    'dance-preprof':    'Sì, a livello pre-professionale',
+    'dance-prof':       'Sì, a livello professionale',
+    'years-label':      'Per quanti anni hai praticato danza?',
+    'years-error':      'Seleziona un\'opzione.',
+    'yr-lt1':           'Meno di 1 anno',
+    'yr-1to3':          'Da 1 a 3 anni',
+    'yr-4to7':          'Da 4 a 7 anni',
+    'yr-8plus':         '8 anni o più',
+    'required':         'Tutti i campi sono obbligatori.',
+    'continue-demo':    'Continua →',
+    'step2':            'Passo 2 di 3',
+    'instr-title':      'Cosa <em>farai</em>',
+    'instr-p1':         'Guarderai una serie di brevi video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.',
+    'instr-p2':         'Dopo ogni video, sposta il cursore per indicare quali sensazioni ti trasmette questo movimento — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.',
+    'instr-p3':         'Non esistono risposte giuste o sbagliate. Siamo interessati alla tua percezione spontanea e personale. Valuta ogni video in modo indipendente.',
+    'instr-note':       'Lo studio non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.',
+    'ready':            'Sono prontƏ →',
+    'step3':            'Passo 3 di 3 — Compito',
+    'gate-title':       'ProntƏ a <em>iniziare</em>?',
+    'gate-body':        'I video saranno riprodotti automaticamente. Tocca il pulsante qui sotto per avviare il compito.',
+    'start':            'Inizia',
+    'loading':          'Caricamento',
+    'preload-title':    'Preparazione dei <em>video</em>…',
+    'preload-body':     'Attendi mentre carichiamo tutti i video. Questo garantisce una riproduzione fluida durante il compito.',
+    'label-gentle':     '← Gentile',
+    'label-rude':       'Brusco →',
+    'confirm':          'Conferma valutazione →',
+    'complete':         'Studio completato',
+    'thanks-title':     'Grazie per aver <em>partecipato</em>',
+    'thanks-body':      'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.',
+    'close':            'Puoi ora chiudere questa finestra.',
+    'video-of':         'Video {n} di {total}',
+    'loaded-of':        '{n} / {total} caricati',
+  }
+};
+  
+let currentLang = 'en';
+
+function tr(key) {
+  return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS['en'][key] || key;
+}
+
+const UI_MAP = [
+  ['t-study-label',      'study-label',      true],
+  ['t-consent-title',    'consent-title',     true],
+  ['t-consent-box',      'consent-box',       true],
+  ['t-agree',            'agree',             false],
+  ['t-disagree',         'disagree',          false],
+  ['consent-error',      'consent-error',     false],
+  ['t-continue-consent', 'continue-consent',  false],
+  ['t-declined-title',   'declined-title',    false],
+  ['t-declined-body',    'declined-body',     false],
+  ['t-step1',            'step1',             false],
+  ['t-demo-title',       'demo-title',        true],
+  ['t-age-label',        'age-label',         false],
+  ['age-error',          'age-error',         false],
+  ['t-gender-label',     'gender-label',      false],
+  ['gender-error',       'gender-error',      false],
+  ['t-female',           'female',            false],
+  ['t-male',             'male',              false],
+  ['t-other',            'other',             false],
+  ['t-prefernot',        'prefernot',         false],
+  ['t-dance-label',      'dance-label',       false],
+  ['dance-error',        'dance-error',       false],
+  ['t-dance-no',         'dance-no',          false],
+  ['t-dance-amateur',    'dance-amateur',     false],
+  ['t-dance-preprof',    'dance-preprof',     false],
+  ['t-dance-prof',       'dance-prof',        false],
+  ['t-years-label',      'years-label',       false],
+  ['years-error',        'years-error',       false],
+  ['t-yr-lt1',           'yr-lt1',            false],
+  ['t-yr-1to3',          'yr-1to3',           false],
+  ['t-yr-4to7',          'yr-4to7',           false],
+  ['t-yr-8plus',         'yr-8plus',          false],
+  ['t-required',         'required',          false],
+  ['t-continue-demo',    'continue-demo',     false],
+  ['t-step2',            'step2',             false],
+  ['t-instr-title',      'instr-title',       true],
+  ['t-instr-p1',         'instr-p1',          true],
+  ['t-instr-p2',         'instr-p2',          true],
+  ['t-instr-p3',         'instr-p3',          true],
+  ['t-instr-note',       'instr-note',        true],
+  ['t-ready',            'ready',             false],
+  ['t-step3',            'step3',             false],
+  ['t-gate-title',       'gate-title',        true],
+  ['t-gate-body',        'gate-body',         false],
+  ['t-start',            'start',             false],
+  ['t-loading',          'loading',           false],
+  ['t-preload-title',    'preload-title',     true],
+  ['t-preload-body',     'preload-body',      false],
+  ['t-label-gentle',     'label-gentle',      false],
+  ['t-label-rude',       'label-rude',        false],
+  ['t-confirm',          'confirm',           false],
+  ['t-complete',         'complete',          false],
+  ['t-thanks-title',     'thanks-title',      true],
+  ['t-thanks-body',      'thanks-body',       false],
+  ['t-close',            'close',             false],
+];
+
+function applyTranslations() {
+  UI_MAP.forEach(([elId, key, isHtml]) => {
+    const el = document.getElementById(elId);
+    if (!el) return;
+    if (isHtml) el.innerHTML = tr(key);
+    else el.textContent = tr(key);
+  });
+  const ageInput = document.getElementById('age');
+  if (ageInput) ageInput.placeholder = tr('age-placeholder');
+}
+
+function setLanguage(lang) {
+  currentLang = lang;
+  applyTranslations();
+  showScreen('screen-consent');
+}
+
+// ============================================================
+// CONFIG
+// ============================================================
+const VIDEO_CONFIGS = [
+  { id: 'BRUSCO-1',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-1.webm'] },
+  { id: 'BRUSCO-2',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-2.webm'] },
+  { id: 'BRUSCO-3',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-3.webm'] },
+  { id: 'BRUSCO-4',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-4.webm'] },
+  { id: 'BRUSCO-5',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-5.webm'] },
+  { id: 'BRUSCO-6',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-6.webm'] },
+  { id: 'BRUSCO-7',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-7.webm'] },
+  { id: 'BRUSCO-8',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-8.webm'] },
+  { id: 'BRUSCO-9',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-9.webm'] },
+  { id: 'BRUSCO-10',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-10.webm'] },
+];
+
+
+// ============================================================
+// STATE
+// ============================================================
+const state = {
+  subjectId: generateId(),
+  consent: null,
+  age: null,
+  gender: null,
+  dance: null,
+  years: null,
+  trialOrder: [],
+  currentTrial: 0,
+  ratings: [],
+  startTime: null,
+  trialStart: null,
+};
+
+const preloadedVideos = {};
+
+function generateId() {
+  return 'S_' + Date.now() + '_' + Math.random().toString(36).slice(2,7).toUpperCase();
+}
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function selectRadio(el, name, value) {
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+    r.closest('.radio-option').classList.remove('selected');
+  });
+  el.classList.add('selected');
+  const input = el.querySelector('input');
+  if (input) input.checked = true;
+
+  if (name === 'dance') {
+    const yearsField = document.getElementById('years-field');
+    yearsField.style.display = value !== 'no' ? 'block' : 'none';
+    if (value === 'no') {
+      document.querySelectorAll('input[name="years"]').forEach(r => {
+        r.closest('.radio-option').classList.remove('selected');
+      });
+    }
+  }
+}
+
+function getRadioValue(name) {
+  const selected = document.querySelector(`.radio-option.selected input[name="${name}"]`);
+  if (selected) return selected.value;
+  const checked = document.querySelector(`input[name="${name}"]:checked`);
+  return checked ? checked.value : null;
+}
+
+function showError(id, show) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('visible', show);
+}
+
+// ============================================================
+// CONSENT
+// ============================================================
+function submitConsent() {
+  const val = getRadioValue('consent');
+  if (!val) { showError('consent-error', true); return; }
+  showError('consent-error', false);
+  state.consent = val;
+  if (val === 'disagree') { showScreen('screen-declined'); return; }
+  showScreen('screen-demo');
+}
+
+// ============================================================
+// DEMOGRAPHICS
+// ============================================================
+function submitDemo() {
+  let valid = true;
+
+  const age = parseInt(document.getElementById('age').value);
+  if (!age || age < 18 || age > 120) { showError('age-error', true); valid = false; }
+  else { showError('age-error', false); state.age = age; }
+
+  const gender = getRadioValue('gender');
+  if (!gender) { showError('gender-error', true); valid = false; }
+  else { showError('gender-error', false); state.gender = gender; }
+
+  const dance = getRadioValue('dance');
+  if (!dance) { showError('dance-error', true); valid = false; }
+  else { showError('dance-error', false); state.dance = dance; }
+
+  if (dance && dance !== 'no') {
+    const years = getRadioValue('years');
+    if (!years) { showError('years-error', true); valid = false; }
+    else { showError('years-error', false); state.years = years; }
+  } else {
+    state.years = 'N/A';
+  }
+
+  if (!valid) return;
+  showScreen('screen-instructions');
+}
+
+// ============================================================
+// GATE → PRELOAD → TASK
+// ============================================================
+function goToGate() { showScreen('screen-gate'); }
+
+function startTask() {
+  state.trialOrder = shuffle(VIDEO_CONFIGS.map((_, i) => i));
+  state.startTime = Date.now();
+  showScreen('screen-preload');
+  preloadVideos();
+}
+
+function preloadVideos() {
+  const total = VIDEO_CONFIGS.length;
+  let loaded = 0;
+  const fill = document.getElementById('preload-fill');
+  const txt = document.getElementById('preload-text');
+
+  const isPlaceholder = !VIDEO_CONFIGS[0].src[0] && !VIDEO_CONFIGS[0].src[1];
+
+  if (isPlaceholder) {
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      fill.style.width = Math.round((i / total) * 100) + '%';
+      txt.textContent = tr('loaded-of').replace('{n}', i).replace('{total}', total);
+      if (i >= total) {
+        clearInterval(interval);
+        setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
+      }
+    }, 300);
+    return;
+  }
+
+  VIDEO_CONFIGS.forEach(cfg => {
+    const vid = document.createElement('video');
+    vid.muted = true; vid.loop = true; vid.preload = 'auto'; vid.playsInline = true;
+
+    cfg.src.forEach(url => {
+      if (!url) return;
+      const source = document.createElement('source');
+      source.src = url;
+      source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
+      vid.appendChild(source);
+    });
+
+    const onDone = () => {
+      loaded++;
+      fill.style.width = Math.round((loaded / total) * 100) + '%';
+      txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', total);
+      preloadedVideos[cfg.id] = vid;
+      if (loaded >= total) setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
+    };
+
+    vid.addEventListener('canplaythrough', onDone, { once: true });
+    vid.addEventListener('error', onDone, { once: true });
+    vid.load();
+  });
+}
+
+// ============================================================
+// TASK
+// ============================================================
+function renderTrial() {
+  const n = state.currentTrial;
+  const total = state.trialOrder.length;
+  const cfg = VIDEO_CONFIGS[state.trialOrder[n]];
+
+  document.getElementById('video-counter').textContent =
+    tr('video-of').replace('{n}', n + 1).replace('{total}', total);
+  document.getElementById('task-progress').style.width = ((n / total) * 100) + '%';
+  document.getElementById('rating-slider').value = 50;
+
+  const wrapper = document.getElementById('video-wrapper');
+  wrapper.innerHTML = '';
+
+  if (!cfg.src[0] && !cfg.src[1]) {
+    wrapper.innerHTML = `<div class="video-placeholder">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+      <span>${cfg.id}</span></div>`;
+  } else {
+    const vid = preloadedVideos[cfg.id] || document.createElement('video');
+    vid.muted = true; vid.loop = true; vid.playsInline = true;
+    vid.style.cssText = 'width:100%;height:100%;object-fit:contain;';
+    wrapper.appendChild(vid);
+    vid.play().catch(() => {});
+  }
+
+  state.trialStart = Date.now();
+}
+
+function unlockSlider() {}
+
+function confirmRating() {
+  const n = state.currentTrial;
+  const cfg = VIDEO_CONFIGS[state.trialOrder[n]];
+  const rating = parseInt(document.getElementById('rating-slider').value);
+  const rt = Date.now() - state.trialStart;
+
+  state.ratings.push({ trial: n + 1, video_id: cfg.id, rating_0_100: rating, response_time_ms: rt });
+
+  const vid = document.querySelector('#video-wrapper video');
+  if (vid) vid.pause();
+
+  state.currentTrial++;
+
+  if (state.currentTrial >= state.trialOrder.length) {
+    finishTask();
+  } else {
+    document.getElementById('screen-task').classList.remove('active');
+    setTimeout(() => {
+      document.getElementById('screen-task').classList.add('active');
+      renderTrial();
+    }, 50);
+  }
+}
+
+// ============================================================
+// DEVICE FINGERPRINT
+// ============================================================
+function getDeviceFingerprint() {
+  const ua = navigator.userAgent || '';
+  const screen_res = `${screen.width}x${screen.height}x${screen.colorDepth}`;
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+  const lang = navigator.language || '';
+  const cores = navigator.hardwareConcurrency || '';
+  const raw = `${ua}|${screen_res}|${timezone}|${lang}|${cores}`;
+  let hash = 0;
+  for (let i = 0; i < raw.length; i++) {
+    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
+    hash |= 0;
+  }
+  return {
+    fingerprint_hash: Math.abs(hash).toString(36).toUpperCase(),
+    user_agent: ua,
+    screen: screen_res,
+    timezone: timezone,
+    browser_language: lang,
+    cpu_cores: cores,
+  };
+}
+
+// ============================================================
+// FINISH
+// ============================================================
+function finishTask() {
+  const device = getDeviceFingerprint();
+  const output = {
+    subject_id: state.subjectId,
+    language: currentLang,
+    session_timestamp: new Date().toISOString(),
+    device_fingerprint: device.fingerprint_hash,
+    user_agent: device.user_agent,
+    screen: device.screen,
+    timezone: device.timezone,
+    browser_language: device.browser_language,
+    cpu_cores: device.cpu_cores,
+    demographics: {
+      age: state.age,
+      gender: state.gender,
+      dance_experience: state.dance,
+      years_of_practice: state.years,
+    },
+    trial_order: state.trialOrder.map(i => VIDEO_CONFIGS[i].id),
+    ratings: state.ratings,
+  };
+
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwvd903e3Q4Vd5IubvY61tyOUNRSSjm6m-SzyMuJ4d_G8jFRxSmZLOiksTz6imTgH77FA/exec';
+  fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(output)
+  }).catch(err => console.warn('Data send failed:', err));
+
+  showScreen('screen-thanks');
+}
+</script>
+</body>
+</html>
