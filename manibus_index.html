@@ -619,7 +619,7 @@ const TRANSLATIONS = {
     'break-continue':   'Continue →',
     'loaded-of':        '{n} / {total} loaded',
   },
-  it: {
+    it: {
     'study-label':      'Studio sulla Percezione del Movimento',
     'consent-title':    'Prima di <em>iniziare</em>',
     'consent-box':      'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.',
@@ -656,14 +656,14 @@ const TRANSLATIONS = {
     'continue-demo':    'Continua →',
     'step2':            'Passo 2 di 3',
     'instr-title':      'Cosa <em>farai</em>',
-    'instr-p1':         'Guarderai una serie di brevi clip video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.',
-    'instr-p2':         'Dopo ogni video, sposta il cursore per indicare quali sensazioni questo movimento evoca in te — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.',
+    'instr-p1':         'Guarderai una serie di brevi video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.',
+    'instr-p2':         'Dopo ogni video, sposta il cursore per indicare quali sensazioni ti trasmette questo movimento — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.',
     'instr-p3':         'Non esistono risposte giuste o sbagliate. Siamo interessati alla tua percezione spontanea e personale. Valuta ogni video in modo indipendente.',
-    'instr-note':       'Lo studio è composto da <strong style="color:var(--text)">120 brevi clip video</strong> e non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.',
-    'ready':            'Sono pronto/a →',
+    'instr-note':       'Lo studio non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.',
+    'ready':            'Sono prontə →',
     'step3':            'Passo 3 di 3 — Compito',
-    'gate-title':       'Pronto/a a <em>iniziare</em>?',
-    'gate-body':        'I video inizieranno a riprodursi automaticamente. Tocca il pulsante qui sotto per sbloccare la riproduzione sul tuo dispositivo e avviare il compito.',
+    'gate-title':       'Prontə a <em>iniziare</em>?',
+    'gate-body':        'I video saranno riprodotti automaticamente. Tocca il pulsante qui sotto per avviare il compito.',
     'start':            'Inizia',
     'loading':          'Caricamento',
     'preload-title':    'Preparazione dei <em>video</em>…',
@@ -676,10 +676,6 @@ const TRANSLATIONS = {
     'thanks-body':      'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.',
     'close':            'Puoi ora chiudere questa finestra.',
     'video-of':         'Video {n} di {total}',
-    'break-label':      'Pausa breve',
-    'break-title':      'Prenditi un <em>momento</em>',
-    'break-body':       'Ottimo lavoro! Hai completato una sezione. Prenditi una pausa se ne hai bisogno, poi premi Continua quando sei prontƏ.',
-    'break-continue':   'Continua →',
     'loaded-of':        '{n} / {total} caricati',
   }
 };
@@ -1146,25 +1142,12 @@ function renderTrial() {
       </svg>
       <span>${cfg.id}</span></div>`;
   } else {
-    const original = preloadedVideos[cfg.id];
-    let vid;
-    if (original) {
-      vid = original.cloneNode(true);
-    } else {
-      vid = document.createElement('video');
-      vid.muted = true; vid.loop = true; vid.playsInline = true;
-      cfg.src.forEach(url => {
-        if (!url) return;
-        const source = document.createElement('source');
-        source.src = url;
-        source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
-        vid.appendChild(source);
-      });
-    }
-    vid.muted = true; vid.loop = true; vid.playsInline = true;
+    const vid = preloadedVideos[cfg.id] || document.createElement('video');
+    vid.muted = true;
+    vid.loop = true;
+    vid.playsInline = true;
     vid.style.cssText = 'width:100%;height:100%;object-fit:contain;';
     wrapper.appendChild(vid);
-    vid.load();
     vid.play().catch(() => {});
   }
 
