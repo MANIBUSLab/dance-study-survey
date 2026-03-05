@@ -1041,6 +1041,7 @@ function startBlock() {
 
 function preloadBlock(blockIndices, blockTotal) {
   let loaded = 0;
+  let blockDone = false;
   const fill = document.getElementById('preload-fill');
   const txt = document.getElementById('preload-text');
 
@@ -1050,7 +1051,7 @@ function preloadBlock(blockIndices, blockTotal) {
       loaded++;
       fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
-      if (loaded >= blockTotal) setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
+      if (loaded >= blockTotal && !blockDone) { blockDone = true; setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400); }
       return;
     }
     const vid = document.createElement('video');
@@ -1070,7 +1071,7 @@ function preloadBlock(blockIndices, blockTotal) {
       fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
       preloadedVideos[cfg.id] = vid;
-      if (loaded >= blockTotal) setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
+      if (loaded >= blockTotal && !blockDone) { blockDone = true; setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400); }
     };
     vid.addEventListener('canplaythrough', onDone, { once: true });
     vid.addEventListener('loadeddata', onDone, { once: true });
