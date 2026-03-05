@@ -20,9 +20,7 @@
     --radius: 12px;
     --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -35,7 +33,6 @@
     padding: 20px;
     overflow-x: hidden;
   }
-
   body::before {
     content: '';
     position: fixed;
@@ -46,7 +43,6 @@
     pointer-events: none;
     z-index: 0;
   }
-
   .screen {
     display: none;
     width: 100%;
@@ -56,23 +52,19 @@
     animation: fadeIn 0.5s ease forwards;
   }
   .screen.active { display: block; }
-
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 20px;
     padding: 48px;
   }
-
   @media (max-width: 540px) {
     .card { padding: 28px 20px; }
   }
-
   .label-small {
     font-size: 11px;
     letter-spacing: 0.15em;
@@ -80,7 +72,6 @@
     color: var(--text-muted);
     margin-bottom: 12px;
   }
-
   h1 {
     font-family: 'DM Serif Display', serif;
     font-size: clamp(26px, 5vw, 36px);
@@ -89,16 +80,13 @@
     margin-bottom: 24px;
     color: var(--text);
   }
-
   h1 em { font-style: italic; color: var(--accent); }
-
   p {
     font-size: 15px;
     line-height: 1.75;
     color: #c4c2d4;
     margin-bottom: 16px;
   }
-
   .consent-box {
     background: var(--surface2);
     border: 1px solid var(--border);
@@ -109,9 +97,7 @@
     line-height: 1.8;
     color: #b0aec4;
   }
-
   .radio-group { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
-
   .radio-option {
     display: flex;
     align-items: center;
@@ -124,11 +110,9 @@
     font-size: 14px;
     color: #c4c2d4;
   }
-
   .radio-option:hover { border-color: var(--accent2); background: rgba(124,111,205,0.06); }
   .radio-option.selected { border-color: var(--accent); background: rgba(200,184,255,0.08); color: var(--text); }
   .radio-option input { display: none; }
-
   .radio-dot {
     width: 18px; height: 18px;
     border-radius: 50%;
@@ -137,7 +121,6 @@
     transition: var(--transition);
     display: flex; align-items: center; justify-content: center;
   }
-
   .radio-option.selected .radio-dot { border-color: var(--accent); background: var(--accent); }
   .radio-option.selected .radio-dot::after {
     content: '';
@@ -145,10 +128,8 @@
     background: var(--bg);
     border-radius: 50%;
   }
-
   .field { margin-bottom: 28px; }
   .field label { display: block; font-size: 13px; color: var(--text-muted); margin-bottom: 10px; letter-spacing: 0.05em; }
-
   input[type="number"] {
     width: 100%;
     background: var(--surface2);
@@ -163,7 +144,6 @@
   }
   input[type="number"]:focus { border-color: var(--accent2); }
   input[type="number"]::-webkit-inner-spin-button { opacity: 0.4; }
-
   .btn {
     display: inline-flex;
     align-items: center;
@@ -179,16 +159,12 @@
     transition: var(--transition);
     letter-spacing: 0.03em;
   }
-
   .btn-primary { background: var(--accent); color: #1a1828; }
   .btn-primary:hover { background: #d8caff; transform: translateY(-1px); box-shadow: 0 8px 24px rgba(200,184,255,0.2); }
   .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
-
   .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
   .btn-outline:hover { border-color: var(--accent2); color: var(--text); }
-
   .btn-row { display: flex; justify-content: flex-end; margin-top: 36px; gap: 12px; }
-
   .progress-bar {
     height: 3px;
     background: var(--border);
@@ -202,9 +178,7 @@
     border-radius: 2px;
     transition: width 0.5s ease;
   }
-
   .video-counter { font-size: 12px; letter-spacing: 0.1em; color: var(--text-muted); text-align: right; margin-bottom: 20px; }
-
   .video-wrapper {
     position: relative;
     width: 100%;
@@ -215,7 +189,6 @@
     margin-bottom: 36px;
   }
   .video-wrapper video { width: 100%; height: 100%; object-fit: contain; display: block; }
-
   .video-placeholder {
     width: 100%; height: 100%;
     display: flex; flex-direction: column;
@@ -225,15 +198,12 @@
     font-size: 13px;
   }
   .video-placeholder svg { opacity: 0.4; }
-
-  /* SLIDER */
   .slider-section { margin-bottom: 32px; }
   .slider-labels { display: flex; justify-content: space-between; margin-bottom: 12px; }
   .slider-label { font-size: 13px; font-weight: 500; letter-spacing: 0.05em; }
   .slider-label.gentle { color: var(--gentle); }
   .slider-label.rude   { color: var(--rude); }
   .slider-track { position: relative; height: 44px; display: flex; align-items: center; }
-
   input[type="range"] {
     -webkit-appearance: none;
     appearance: none;
@@ -272,7 +242,6 @@
     box-shadow: 0 0 0 2px rgba(255,255,255,0.4);
     cursor: grab;
   }
-
   .gate-icon {
     width: 72px; height: 72px;
     border-radius: 50%;
@@ -282,7 +251,6 @@
     margin: 0 auto 28px;
     font-size: 28px;
   }
-
   .preload-bar { margin: 24px 0; }
   .preload-text { font-size: 13px; color: var(--text-muted); text-align: center; margin-top: 12px; }
   .thank-icon { font-size: 48px; text-align: center; margin-bottom: 24px; }
@@ -290,8 +258,6 @@
   .error-msg { font-size: 12px; color: var(--rude); margin-top: 8px; display: none; }
   .error-msg.visible { display: block; }
   .required-note { font-size: 12px; color: var(--text-muted); margin-top: 24px; }
-
-  /* LANGUAGE PICKER */
   .lang-picker {
     display: flex;
     gap: 16px;
@@ -324,9 +290,24 @@
     box-shadow: 0 8px 24px rgba(200,184,255,0.12);
   }
   .lang-flag { font-size: 36px; line-height: 1; }
+
+  /* Safari/iOS fix: hidden pool keeps video elements in DOM so browser doesn't free memory */
+  #video-pool {
+    position: fixed;
+    left: -9999px;
+    top: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+  }
 </style>
 </head>
 <body>
+
+<!-- SAFARI FIX: keep preloaded video elements anchored in DOM -->
+<div id="video-pool"></div>
 
 <!-- SCREEN 0: LANGUAGE -->
 <div class="screen active" id="screen-lang">
@@ -386,13 +367,11 @@
   <div class="card">
     <div class="label-small" id="t-step1"></div>
     <h1 id="t-demo-title"></h1>
-
     <div class="field">
       <label id="t-age-label"></label>
       <input type="number" id="age" min="18" max="120">
       <p class="error-msg" id="age-error"></p>
     </div>
-
     <div class="field">
       <label id="t-gender-label"></label>
       <div class="radio-group">
@@ -411,7 +390,6 @@
       </div>
       <p class="error-msg" id="gender-error"></p>
     </div>
-
     <div class="field">
       <label id="t-dance-label"></label>
       <div class="radio-group">
@@ -430,7 +408,6 @@
       </div>
       <p class="error-msg" id="dance-error"></p>
     </div>
-
     <div class="field" id="years-field" style="display:none;">
       <label id="t-years-label"></label>
       <div class="radio-group">
@@ -449,7 +426,6 @@
       </div>
       <p class="error-msg" id="years-error"></p>
     </div>
-
     <p class="required-note" id="t-required"></p>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="submitDemo()" id="t-continue-demo"></button>
@@ -619,7 +595,7 @@ const TRANSLATIONS = {
     'break-continue':   'Continue →',
     'loaded-of':        '{n} / {total} loaded',
   },
-    it: {
+  it: {
     'study-label':      'Studio sulla Percezione del Movimento',
     'consent-title':    'Prima di <em>iniziare</em>',
     'consent-box':      'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.',
@@ -781,46 +757,46 @@ const VIDEO_CONFIGS = [
   { id: 'BRUSCO-7',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-7.webm'] },
   { id: 'BRUSCO-8',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-8.webm'] },
   { id: 'BRUSCO-9',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-9.webm'] },
-  { id: 'BRUSCO-10',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-10.webm'] },
-  { id: 'BRUSCO-11',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-11.webm'] },
-  { id: 'BRUSCO-12',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-12.webm'] },
-  { id: 'BRUSCO-13',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-13.webm'] },
-  { id: 'BRUSCO-14',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-14.webm'] },
-  { id: 'BRUSCO-15',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-15.webm'] },
-  { id: 'BRUSCO-16',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-16.webm'] },
-  { id: 'BRUSCO-17',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-17.webm'] },
-  { id: 'BRUSCO-18',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-18.webm'] },
-  { id: 'BRUSCO-19',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-19.webm'] },
-  { id: 'BRUSCO-20',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-20.webm'] },
-  { id: 'BRUSCO-21',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-21.webm'] },
-  { id: 'BRUSCO-22',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-22.webm'] },
-  { id: 'BRUSCO-23',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-23.webm'] },
-  { id: 'BRUSCO-24',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-24.webm'] },
-  { id: 'BRUSCO-25',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-25.webm'] },
-  { id: 'BRUSCO-26',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-26.webm'] },
-  { id: 'BRUSCO-27',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-27.webm'] },
-  { id: 'BRUSCO-28',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-28.webm'] },
-  { id: 'BRUSCO-29',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-29.webm'] },
-  { id: 'BRUSCO-30',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-30.webm'] },
-  { id: 'BRUSCO-31',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-31.webm'] },
-  { id: 'BRUSCO-32',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-32.webm'] },
-  { id: 'BRUSCO-33',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-33.webm'] },
-  { id: 'BRUSCO-34',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-34.webm'] },
-  { id: 'BRUSCO-35',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-35.webm'] },
-  { id: 'BRUSCO-36',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-36.webm'] },
-  { id: 'BRUSCO-37',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-37.webm'] },
-  { id: 'BRUSCO-38',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-38.webm'] },
-  { id: 'BRUSCO-39',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-39.webm'] },
-  { id: 'BRUSCO-40',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-40.webm'] },
-  { id: 'GENTILE-1', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-1.webm'] },
-  { id: 'GENTILE-2', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-2.webm'] },
-  { id: 'GENTILE-3', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-3.webm'] },
-  { id: 'GENTILE-4', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-4.webm'] },
-  { id: 'GENTILE-5', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-5.webm'] },
-  { id: 'GENTILE-6', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-6.webm'] },
-  { id: 'GENTILE-7', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-7.webm'] },
-  { id: 'GENTILE-8', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-8.webm'] },
-  { id: 'GENTILE-9', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-9.webm'] },
+  { id: 'BRUSCO-10', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-10.webm'] },
+  { id: 'BRUSCO-11', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-11.webm'] },
+  { id: 'BRUSCO-12', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-12.webm'] },
+  { id: 'BRUSCO-13', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-13.webm'] },
+  { id: 'BRUSCO-14', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-14.webm'] },
+  { id: 'BRUSCO-15', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-15.webm'] },
+  { id: 'BRUSCO-16', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-16.webm'] },
+  { id: 'BRUSCO-17', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-17.webm'] },
+  { id: 'BRUSCO-18', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-18.webm'] },
+  { id: 'BRUSCO-19', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-19.webm'] },
+  { id: 'BRUSCO-20', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-20.webm'] },
+  { id: 'BRUSCO-21', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-21.webm'] },
+  { id: 'BRUSCO-22', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-22.webm'] },
+  { id: 'BRUSCO-23', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-23.webm'] },
+  { id: 'BRUSCO-24', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-24.webm'] },
+  { id: 'BRUSCO-25', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-25.webm'] },
+  { id: 'BRUSCO-26', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-26.webm'] },
+  { id: 'BRUSCO-27', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-27.webm'] },
+  { id: 'BRUSCO-28', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-28.webm'] },
+  { id: 'BRUSCO-29', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-29.webm'] },
+  { id: 'BRUSCO-30', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-30.webm'] },
+  { id: 'BRUSCO-31', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-31.webm'] },
+  { id: 'BRUSCO-32', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-32.webm'] },
+  { id: 'BRUSCO-33', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-33.webm'] },
+  { id: 'BRUSCO-34', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-34.webm'] },
+  { id: 'BRUSCO-35', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-35.webm'] },
+  { id: 'BRUSCO-36', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-36.webm'] },
+  { id: 'BRUSCO-37', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-37.webm'] },
+  { id: 'BRUSCO-38', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-38.webm'] },
+  { id: 'BRUSCO-39', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-39.webm'] },
+  { id: 'BRUSCO-40', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-40.webm'] },
+  { id: 'GENTILE-1',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-1.webm'] },
+  { id: 'GENTILE-2',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-2.webm'] },
+  { id: 'GENTILE-3',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-3.webm'] },
+  { id: 'GENTILE-4',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-4.webm'] },
+  { id: 'GENTILE-5',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-5.webm'] },
+  { id: 'GENTILE-6',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-6.webm'] },
+  { id: 'GENTILE-7',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-7.webm'] },
+  { id: 'GENTILE-8',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-8.webm'] },
+  { id: 'GENTILE-9',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-9.webm'] },
   { id: 'GENTILE-10', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-10.webm'] },
   { id: 'GENTILE-11', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-11.webm'] },
   { id: 'GENTILE-12', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/GENTILE-12.webm'] },
@@ -861,37 +837,37 @@ const VIDEO_CONFIGS = [
   { id: 'NEUTRO-7',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-7.webm'] },
   { id: 'NEUTRO-8',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-8.webm'] },
   { id: 'NEUTRO-9',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-9.webm'] },
-  { id: 'NEUTRO-10',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-10.webm'] },
-  { id: 'NEUTRO-11',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-11.webm'] },
-  { id: 'NEUTRO-12',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-12.webm'] },
-  { id: 'NEUTRO-13',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-13.webm'] },
-  { id: 'NEUTRO-14',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-14.webm'] },
-  { id: 'NEUTRO-15',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-15.webm'] },
-  { id: 'NEUTRO-16',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-16.webm'] },
-  { id: 'NEUTRO-17',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-17.webm'] },
-  { id: 'NEUTRO-18',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-18.webm'] },
-  { id: 'NEUTRO-19',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-19.webm'] },
-  { id: 'NEUTRO-20',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-20.webm'] },
-  { id: 'NEUTRO-21',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-21.webm'] },
-  { id: 'NEUTRO-22',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-22.webm'] },
-  { id: 'NEUTRO-23',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-23.webm'] },
-  { id: 'NEUTRO-24',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-24.webm'] },
-  { id: 'NEUTRO-25',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-25.webm'] },
-  { id: 'NEUTRO-26',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-26.webm'] },
-  { id: 'NEUTRO-27',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-27.webm'] },
-  { id: 'NEUTRO-28',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-28.webm'] },
-  { id: 'NEUTRO-29',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-29.webm'] },
-  { id: 'NEUTRO-30',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-30.webm'] },
-  { id: 'NEUTRO-31',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-31.webm'] },
-  { id: 'NEUTRO-32',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-32.webm'] },
-  { id: 'NEUTRO-33',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-33.webm'] },
-  { id: 'NEUTRO-34',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-34.webm'] },
-  { id: 'NEUTRO-35',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-35.webm'] },
-  { id: 'NEUTRO-36',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-36.webm'] },
-  { id: 'NEUTRO-37',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-37.webm'] },
-  { id: 'NEUTRO-38',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-38.webm'] },
-  { id: 'NEUTRO-39',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-39.webm'] },
-  { id: 'NEUTRO-40',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-40.webm'] }
+  { id: 'NEUTRO-10', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-10.webm'] },
+  { id: 'NEUTRO-11', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-11.webm'] },
+  { id: 'NEUTRO-12', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-12.webm'] },
+  { id: 'NEUTRO-13', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-13.webm'] },
+  { id: 'NEUTRO-14', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-14.webm'] },
+  { id: 'NEUTRO-15', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-15.webm'] },
+  { id: 'NEUTRO-16', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-16.webm'] },
+  { id: 'NEUTRO-17', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-17.webm'] },
+  { id: 'NEUTRO-18', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-18.webm'] },
+  { id: 'NEUTRO-19', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-19.webm'] },
+  { id: 'NEUTRO-20', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-20.webm'] },
+  { id: 'NEUTRO-21', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-21.webm'] },
+  { id: 'NEUTRO-22', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-22.webm'] },
+  { id: 'NEUTRO-23', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-23.webm'] },
+  { id: 'NEUTRO-24', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-24.webm'] },
+  { id: 'NEUTRO-25', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-25.webm'] },
+  { id: 'NEUTRO-26', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-26.webm'] },
+  { id: 'NEUTRO-27', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-27.webm'] },
+  { id: 'NEUTRO-28', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-28.webm'] },
+  { id: 'NEUTRO-29', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-29.webm'] },
+  { id: 'NEUTRO-30', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-30.webm'] },
+  { id: 'NEUTRO-31', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-31.webm'] },
+  { id: 'NEUTRO-32', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-32.webm'] },
+  { id: 'NEUTRO-33', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-33.webm'] },
+  { id: 'NEUTRO-34', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-34.webm'] },
+  { id: 'NEUTRO-35', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-35.webm'] },
+  { id: 'NEUTRO-36', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-36.webm'] },
+  { id: 'NEUTRO-37', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-37.webm'] },
+  { id: 'NEUTRO-38', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-38.webm'] },
+  { id: 'NEUTRO-39', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-39.webm'] },
+  { id: 'NEUTRO-40', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-40.webm'] }
 ];
 
 // ============================================================
@@ -906,6 +882,7 @@ const state = {
   years: null,
   trialOrder: [],
   currentTrial: 0,
+  currentBlock: 0,
   ratings: [],
   startTime: null,
   trialStart: null,
@@ -939,7 +916,6 @@ function selectRadio(el, name, value) {
   el.classList.add('selected');
   const input = el.querySelector('input');
   if (input) input.checked = true;
-
   if (name === 'dance') {
     const yearsField = document.getElementById('years-field');
     yearsField.style.display = value !== 'no' ? 'block' : 'none';
@@ -980,19 +956,15 @@ function submitConsent() {
 // ============================================================
 function submitDemo() {
   let valid = true;
-
   const age = parseInt(document.getElementById('age').value);
   if (!age || age < 18 || age > 120) { showError('age-error', true); valid = false; }
   else { showError('age-error', false); state.age = age; }
-
   const gender = getRadioValue('gender');
   if (!gender) { showError('gender-error', true); valid = false; }
   else { showError('gender-error', false); state.gender = gender; }
-
   const dance = getRadioValue('dance');
   if (!dance) { showError('dance-error', true); valid = false; }
   else { showError('dance-error', false); state.dance = dance; }
-
   if (dance && dance !== 'no') {
     const years = getRadioValue('years');
     if (!years) { showError('years-error', true); valid = false; }
@@ -1000,7 +972,6 @@ function submitDemo() {
   } else {
     state.years = 'N/A';
   }
-
   if (!valid) return;
   showScreen('screen-instructions');
 }
@@ -1026,10 +997,8 @@ function startBlock() {
   const blockTotal = blockIndices.length;
   const totalBlocks = Math.ceil(state.trialOrder.length / BLOCK_SIZE);
 
-  // Update preload screen text
   document.getElementById('preload-fill').style.width = '0%';
   document.getElementById('preload-text').textContent = '';
-  // Show block info in preload title
   const titleEl = document.getElementById('t-preload-title');
   if (titleEl) titleEl.innerHTML = currentLang === 'it'
     ? `Blocco <em>${block+1} di ${totalBlocks}</em> — Caricamento…`
@@ -1044,18 +1013,33 @@ function preloadBlock(blockIndices, blockTotal) {
   let blockDone = false;
   const fill = document.getElementById('preload-fill');
   const txt = document.getElementById('preload-text');
+  const pool = document.getElementById('video-pool');
+
+  const advance = () => {
+    if (loaded >= blockTotal && !blockDone) {
+      blockDone = true;
+      setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
+    }
+  };
 
   blockIndices.forEach(idx => {
     const cfg = VIDEO_CONFIGS[idx];
+
+    // Already preloaded — just count it
     if (preloadedVideos[cfg.id]) {
       loaded++;
       fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
-      if (loaded >= blockTotal && !blockDone) { blockDone = true; setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400); }
+      advance();
       return;
     }
+
     const vid = document.createElement('video');
-    vid.muted = true; vid.loop = true; vid.preload = 'auto'; vid.playsInline = true;
+    vid.muted = true;
+    vid.loop = true;
+    vid.preload = 'auto';
+    vid.playsInline = true;
+
     cfg.src.forEach(url => {
       if (!url) return;
       const source = document.createElement('source');
@@ -1063,6 +1047,10 @@ function preloadBlock(blockIndices, blockTotal) {
       source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
       vid.appendChild(source);
     });
+
+    // SAFARI FIX: add to hidden pool immediately so Safari never frees the buffer
+    pool.appendChild(vid);
+
     let done = false;
     const onDone = () => {
       if (done) return;
@@ -1071,55 +1059,7 @@ function preloadBlock(blockIndices, blockTotal) {
       fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
       preloadedVideos[cfg.id] = vid;
-      if (loaded >= blockTotal && !blockDone) { blockDone = true; setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400); }
-    };
-    vid.addEventListener('canplaythrough', onDone, { once: true });
-    vid.addEventListener('loadeddata', onDone, { once: true });
-    vid.addEventListener('error', onDone, { once: true });
-    vid.load();
-  });
-}
-
-function preloadVideos() {
-  const total = VIDEO_CONFIGS.length;
-  let loaded = 0;
-  const fill = document.getElementById('preload-fill');
-  const txt = document.getElementById('preload-text');
-
-  const isPlaceholder = !VIDEO_CONFIGS[0].src[0] && !VIDEO_CONFIGS[0].src[1];
-
-  if (isPlaceholder) {
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      fill.style.width = Math.round((i / total) * 100) + '%';
-      txt.textContent = tr('loaded-of').replace('{n}', i).replace('{total}', total);
-      if (i >= total) {
-        clearInterval(interval);
-        setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
-      }
-    }, 300);
-    return;
-  }
-
-  VIDEO_CONFIGS.forEach(cfg => {
-    const vid = document.createElement('video');
-    vid.muted = true; vid.loop = true; vid.preload = 'auto'; vid.playsInline = true;
-
-    cfg.src.forEach(url => {
-      if (!url) return;
-      const source = document.createElement('source');
-      source.src = url;
-      source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
-      vid.appendChild(source);
-    });
-
-    const onDone = () => {
-      loaded++;
-      fill.style.width = Math.round((loaded / total) * 100) + '%';
-      txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', total);
-      preloadedVideos[cfg.id] = vid;
-      if (loaded >= total) setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
+      advance();
     };
 
     vid.addEventListener('canplaythrough', onDone, { once: true });
@@ -1152,13 +1092,13 @@ function renderTrial() {
       </svg>
       <span>${cfg.id}</span></div>`;
   } else {
-    const vid = preloadedVideos[cfg.id] || document.createElement('video');
-    vid.muted = true;
-    vid.loop = true;
-    vid.playsInline = true;
-    vid.style.cssText = 'width:100%;height:100%;object-fit:contain;';
-    wrapper.appendChild(vid);
-    vid.play().catch(() => {});
+    const vid = preloadedVideos[cfg.id];
+    if (vid) {
+      // SAFARI FIX: video stays in pool; we show it via CSS positioning instead of moving it
+      vid.style.cssText = 'width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;';
+      wrapper.appendChild(vid);
+      vid.play().catch(() => {});
+    }
   }
 
   state.trialStart = Date.now();
@@ -1174,8 +1114,12 @@ function confirmRating() {
 
   state.ratings.push({ trial: n + 1, video_id: cfg.id, rating_0_100: rating, response_time_ms: rt });
 
-  const vid = document.querySelector('#video-wrapper video');
-  if (vid) vid.pause();
+  // Pause current video and move it back to pool
+  const vid = preloadedVideos[cfg.id];
+  if (vid) {
+    vid.pause();
+    document.getElementById('video-pool').appendChild(vid);
+  }
 
   state.currentTrial++;
 
@@ -1185,7 +1129,6 @@ function confirmRating() {
   if (state.currentTrial >= state.trialOrder.length) {
     finishTask();
   } else if (nextBlock > state.currentBlock) {
-    // End of block — show break screen then load next block
     state.currentBlock = nextBlock;
     showScreen('screen-break');
   } else {
