@@ -290,24 +290,9 @@
     box-shadow: 0 8px 24px rgba(200,184,255,0.12);
   }
   .lang-flag { font-size: 36px; line-height: 1; }
-
-  /* Safari/iOS fix: hidden pool keeps video elements in DOM so browser doesn't free memory */
-  #video-pool {
-    position: fixed;
-    left: -9999px;
-    top: -9999px;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    pointer-events: none;
-    opacity: 0;
-  }
 </style>
 </head>
 <body>
-
-<!-- SAFARI FIX: keep preloaded video elements anchored in DOM -->
-<div id="video-pool"></div>
 
 <!-- SCREEN 0: LANGUAGE -->
 <div class="screen active" id="screen-lang">
@@ -528,225 +513,50 @@
 </div>
 
 <script>
-// ============================================================
-// TRANSLATIONS
-// ============================================================
 const TRANSLATIONS = {
   en: {
-    'study-label':      'Movement Perception Study',
-    'consent-title':    'Before we <em>begin</em>',
-    'consent-box':      'The present study is conducted in accordance with the Ethics Committee of the University of Turin. The collected data will be processed in accordance with privacy regulations (Pursuant to EU Regulation 2016/679, the General Data Protection Regulation (GDPR), concerning the protection of natural persons with regard to the processing of personal data and the free movement of such data.). No personal data will be disclosed.<br><br>Please confirm that you agree to take part in the study.',
-    'agree':            'I agree',
-    'disagree':         'I do not agree',
-    'consent-error':    'Please select an option to continue.',
-    'continue-consent': 'Continue →',
-    'declined-title':   'Thank you for your time',
-    'declined-body':    'You have chosen not to participate in this study. You may close this window.',
-    'step1':            'Step 1 of 3',
-    'demo-title':       'A few questions <em>about you</em>',
-    'age-label':        'How old are you?',
-    'age-placeholder':  'Your age',
-    'age-error':        'Please enter a valid age (18–120).',
-    'gender-label':     'What is your gender?',
-    'gender-error':     'Please select an option.',
-    'female':           'Female',
-    'male':             'Male',
-    'other':            'Other',
-    'prefernot':        'Prefer not to say',
-    'dance-label':      'Have you ever practiced dance?',
-    'dance-error':      'Please select an option.',
-    'dance-no':         'No',
-    'dance-amateur':    'Yes, in an amateur context',
-    'dance-preprof':    'Yes, at a pre-professional level',
-    'dance-prof':       'Yes, at a professional level',
-    'years-label':      'How many years have you practiced dance?',
-    'years-error':      'Please select an option.',
-    'yr-lt1':           'Less than 1 year',
-    'yr-1to3':          '1 to 3 years',
-    'yr-4to7':          '4 to 7 years',
-    'yr-8plus':         '8 or more years',
-    'required':         'All fields are required.',
-    'continue-demo':    'Continue →',
-    'step2':            'Step 2 of 3',
-    'instr-title':      'What you\'ll <em>do</em>',
-    'instr-p1':         'You will watch a series of short dance video clips. Each clip lasts approximately 1–2 seconds and will loop continuously while you make your rating.',
-    'instr-p2':         'After each video, move the slider to indicate which feelings this movement evokes in you — from <strong style="color:var(--gentle)">Gentle</strong> on the left to <strong style="color:var(--rude)">Rude</strong> on the right.',
-    'instr-p3':         'There are no right or wrong answers. We are interested in your spontaneous, personal perception. Please rate each video independently.',
-    'instr-note':       'The study should take no more than 10 minutes to be completed. Please make sure you are in a quiet and comfortable room.',
-    'ready':            'I\'m ready →',
-    'step3':            'Step 3 of 3 — Task',
-    'gate-title':       'Ready to <em>start</em>?',
-    'gate-body':        'Videos will begin playing automatically. Tap the button below to unlock video playback on your device and start the task.',
-    'start':            'Start Task',
-    'loading':          'Loading',
-    'preload-title':    'Preparing your <em>videos</em>…',
-    'preload-body':     'Please wait while we load all video clips. This ensures smooth playback throughout the task.',
-    'label-gentle':     '← Gentle',
-    'label-rude':       'Rude →',
-    'confirm':          'Confirm rating →',
-    'complete':         'Study complete',
-    'thanks-title':     'Thank you for <em>participating</em>',
-    'thanks-body':      'Your responses have been recorded. Your contribution is valuable to our research on dance perception.',
-    'close':            'You may now close this window.',
-    'video-of':         'Video {n} of {total}',
-    'break-label':      'Short break',
-    'break-title':      'Take a <em>moment</em>',
-    'break-body':       'Great work! You have completed a section. Take a short break if you need, then press Continue when you are ready.',
-    'break-continue':   'Continue →',
-    'loaded-of':        '{n} / {total} loaded',
+    'study-label':'Movement Perception Study','consent-title':'Before we <em>begin</em>','consent-box':'The present study is conducted in accordance with the Ethics Committee of the University of Turin. The collected data will be processed in accordance with privacy regulations (Pursuant to EU Regulation 2016/679, the General Data Protection Regulation (GDPR), concerning the protection of natural persons with regard to the processing of personal data and the free movement of such data.). No personal data will be disclosed.<br><br>Please confirm that you agree to take part in the study.','agree':'I agree','disagree':'I do not agree','consent-error':'Please select an option to continue.','continue-consent':'Continue →','declined-title':'Thank you for your time','declined-body':'You have chosen not to participate in this study. You may close this window.','step1':'Step 1 of 3','demo-title':'A few questions <em>about you</em>','age-label':'How old are you?','age-placeholder':'Your age','age-error':'Please enter a valid age (18–120).','gender-label':'What is your gender?','gender-error':'Please select an option.','female':'Female','male':'Male','other':'Other','prefernot':'Prefer not to say','dance-label':'Have you ever practiced dance?','dance-error':'Please select an option.','dance-no':'No','dance-amateur':'Yes, in an amateur context','dance-preprof':'Yes, at a pre-professional level','dance-prof':'Yes, at a professional level','years-label':'How many years have you practiced dance?','years-error':'Please select an option.','yr-lt1':'Less than 1 year','yr-1to3':'1 to 3 years','yr-4to7':'4 to 7 years','yr-8plus':'8 or more years','required':'All fields are required.','continue-demo':'Continue →','step2':'Step 2 of 3','instr-title':'What you\'ll <em>do</em>','instr-p1':'You will watch a series of short dance video clips. Each clip lasts approximately 1–2 seconds and will loop continuously while you make your rating.','instr-p2':'After each video, move the slider to indicate which feelings this movement evokes in you — from <strong style="color:var(--gentle)">Gentle</strong> on the left to <strong style="color:var(--rude)">Rude</strong> on the right.','instr-p3':'There are no right or wrong answers. We are interested in your spontaneous, personal perception. Please rate each video independently.','instr-note':'The study should take no more than 10 minutes to be completed. Please make sure you are in a quiet and comfortable room.','ready':'I\'m ready →','step3':'Step 3 of 3 — Task','gate-title':'Ready to <em>start</em>?','gate-body':'Videos will begin playing automatically. Tap the button below to unlock video playback on your device and start the task.','start':'Start Task','loading':'Loading','preload-title':'Preparing your <em>videos</em>…','preload-body':'Please wait while we load all video clips. This ensures smooth playback throughout the task.','label-gentle':'← Gentle','label-rude':'Rude →','confirm':'Confirm rating →','complete':'Study complete','thanks-title':'Thank you for <em>participating</em>','thanks-body':'Your responses have been recorded. Your contribution is valuable to our research on dance perception.','close':'You may now close this window.','video-of':'Video {n} of {total}','break-label':'Short break','break-title':'Take a <em>moment</em>','break-body':'Great work! You have completed a section. Take a short break if you need, then press Continue when you are ready.','break-continue':'Continue →','loaded-of':'{n} / {total} loaded',
   },
   it: {
-    'study-label':      'Studio sulla Percezione del Movimento',
-    'consent-title':    'Prima di <em>iniziare</em>',
-    'consent-box':      'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.',
-    'agree':            'Acconsento',
-    'disagree':         'Non acconsento',
-    'consent-error':    'Seleziona un\'opzione per continuare.',
-    'continue-consent': 'Continua →',
-    'declined-title':   'Grazie per il tuo tempo',
-    'declined-body':    'Hai scelto di non partecipare a questo studio. Puoi chiudere questa finestra.',
-    'step1':            'Passo 1 di 3',
-    'demo-title':       'Alcune domande <em>su di te</em>',
-    'age-label':        'Quanti anni hai?',
-    'age-placeholder':  'La tua età',
-    'age-error':        'Inserisci un\'età valida (18–120).',
-    'gender-label':     'Qual è il tuo genere?',
-    'gender-error':     'Seleziona un\'opzione.',
-    'female':           'Femmina',
-    'male':             'Maschio',
-    'other':            'Altro',
-    'prefernot':        'Preferisco non rispondere',
-    'dance-label':      'Hai mai praticato danza?',
-    'dance-error':      'Seleziona un\'opzione.',
-    'dance-no':         'No',
-    'dance-amateur':    'Sì, in un contesto amatoriale',
-    'dance-preprof':    'Sì, a livello pre-professionale',
-    'dance-prof':       'Sì, a livello professionale',
-    'years-label':      'Per quanti anni hai praticato danza?',
-    'years-error':      'Seleziona un\'opzione.',
-    'yr-lt1':           'Meno di 1 anno',
-    'yr-1to3':          'Da 1 a 3 anni',
-    'yr-4to7':          'Da 4 a 7 anni',
-    'yr-8plus':         '8 anni o più',
-    'required':         'Tutti i campi sono obbligatori.',
-    'continue-demo':    'Continua →',
-    'step2':            'Passo 2 di 3',
-    'instr-title':      'Cosa <em>farai</em>',
-    'instr-p1':         'Guarderai una serie di brevi video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.',
-    'instr-p2':         'Dopo ogni video, sposta il cursore per indicare quali sensazioni ti trasmette questo movimento — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.',
-    'instr-p3':         'Non esistono risposte giuste o sbagliate. Siamo interessati alla tua percezione spontanea e personale. Valuta ogni video in modo indipendente.',
-    'instr-note':       'Lo studio non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.',
-    'ready':            'Sono prontə →',
-    'step3':            'Passo 3 di 3 — Compito',
-    'gate-title':       'Prontə a <em>iniziare</em>?',
-    'gate-body':        'I video saranno riprodotti automaticamente. Tocca il pulsante qui sotto per avviare il compito.',
-    'start':            'Inizia',
-    'loading':          'Caricamento',
-    'preload-title':    'Preparazione dei <em>video</em>…',
-    'preload-body':     'Attendi mentre carichiamo tutti i video. Questo garantisce una riproduzione fluida durante il compito.',
-    'label-gentle':     '← Gentile',
-    'label-rude':       'Brusco →',
-    'confirm':          'Conferma valutazione →',
-    'complete':         'Studio completato',
-    'thanks-title':     'Grazie per aver <em>partecipato</em>',
-    'thanks-body':      'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.',
-    'close':            'Puoi ora chiudere questa finestra.',
-    'video-of':         'Video {n} di {total}',
-    'break-label':      'Intervallo',
-    'break-title':      'Breve <em>pausa</em>',
-    'break-body':       'Ottimo lavoro! Hai completato la sezione. Se ne hai bisogno prenditi un breve momento di pausa, poi premi Continua per ricominciare.',
-    'break-continue':   'Continua →',
-    'loaded-of':        '{n} / {total} caricati',
+    'study-label':'Studio sulla Percezione del Movimento','consent-title':'Prima di <em>iniziare</em>','consent-box':'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.','agree':'Acconsento','disagree':'Non acconsento','consent-error':'Seleziona un\'opzione per continuare.','continue-consent':'Continua →','declined-title':'Grazie per il tuo tempo','declined-body':'Hai scelto di non partecipare a questo studio. Puoi chiudere questa finestra.','step1':'Passo 1 di 3','demo-title':'Alcune domande <em>su di te</em>','age-label':'Quanti anni hai?','age-placeholder':'La tua età','age-error':'Inserisci un\'età valida (18–120).','gender-label':'Qual è il tuo genere?','gender-error':'Seleziona un\'opzione.','female':'Femmina','male':'Maschio','other':'Altro','prefernot':'Preferisco non rispondere','dance-label':'Hai mai praticato danza?','dance-error':'Seleziona un\'opzione.','dance-no':'No','dance-amateur':'Sì, in un contesto amatoriale','dance-preprof':'Sì, a livello pre-professionale','dance-prof':'Sì, a livello professionale','years-label':'Per quanti anni hai praticato danza?','years-error':'Seleziona un\'opzione.','yr-lt1':'Meno di 1 anno','yr-1to3':'Da 1 a 3 anni','yr-4to7':'Da 4 a 7 anni','yr-8plus':'8 anni o più','required':'Tutti i campi sono obbligatori.','continue-demo':'Continua →','step2':'Passo 2 di 3','instr-title':'Cosa <em>farai</em>','instr-p1':'Guarderai una serie di brevi video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.','instr-p2':'Dopo ogni video, sposta il cursore per indicare quali sensazioni ti trasmette questo movimento — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.','instr-p3':'Non esistono risposte giuste o sbagliate. Siamo interessati alla tua percezione spontanea e personale. Valuta ogni video in modo indipendente.','instr-note':'Lo studio non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.','ready':'Sono prontə →','step3':'Passo 3 di 3 — Compito','gate-title':'Prontə a <em>iniziare</em>?','gate-body':'I video saranno riprodotti automaticamente. Tocca il pulsante qui sotto per avviare il compito.','start':'Inizia','loading':'Caricamento','preload-title':'Preparazione dei <em>video</em>…','preload-body':'Attendi mentre carichiamo tutti i video. Questo garantisce una riproduzione fluida durante il compito.','label-gentle':'← Gentile','label-rude':'Brusco →','confirm':'Conferma valutazione →','complete':'Studio completato','thanks-title':'Grazie per aver <em>partecipato</em>','thanks-body':'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.','close':'Puoi ora chiudere questa finestra.','video-of':'Video {n} di {total}','break-label':'Intervallo','break-title':'Breve <em>pausa</em>','break-body':'Ottimo lavoro! Hai completato la sezione. Se ne hai bisogno prenditi un breve momento di pausa, poi premi Continua per ricominciare.','break-continue':'Continua →','loaded-of':'{n} / {total} caricati',
   }
 };
 
 let currentLang = 'en';
-
-function tr(key) {
-  return (TRANSLATIONS[currentLang] && TRANSLATIONS[currentLang][key]) || TRANSLATIONS['en'][key] || key;
-}
+function tr(key) { return (TRANSLATIONS[currentLang]&&TRANSLATIONS[currentLang][key])||TRANSLATIONS['en'][key]||key; }
 
 const UI_MAP = [
-  ['t-study-label',      'study-label',      true],
-  ['t-consent-title',    'consent-title',     true],
-  ['t-consent-box',      'consent-box',       true],
-  ['t-agree',            'agree',             false],
-  ['t-disagree',         'disagree',          false],
-  ['consent-error',      'consent-error',     false],
-  ['t-continue-consent', 'continue-consent',  false],
-  ['t-declined-title',   'declined-title',    false],
-  ['t-declined-body',    'declined-body',     false],
-  ['t-step1',            'step1',             false],
-  ['t-demo-title',       'demo-title',        true],
-  ['t-age-label',        'age-label',         false],
-  ['age-error',          'age-error',         false],
-  ['t-gender-label',     'gender-label',      false],
-  ['gender-error',       'gender-error',      false],
-  ['t-female',           'female',            false],
-  ['t-male',             'male',              false],
-  ['t-other',            'other',             false],
-  ['t-prefernot',        'prefernot',         false],
-  ['t-dance-label',      'dance-label',       false],
-  ['dance-error',        'dance-error',       false],
-  ['t-dance-no',         'dance-no',          false],
-  ['t-dance-amateur',    'dance-amateur',     false],
-  ['t-dance-preprof',    'dance-preprof',     false],
-  ['t-dance-prof',       'dance-prof',        false],
-  ['t-years-label',      'years-label',       false],
-  ['years-error',        'years-error',       false],
-  ['t-yr-lt1',           'yr-lt1',            false],
-  ['t-yr-1to3',          'yr-1to3',           false],
-  ['t-yr-4to7',          'yr-4to7',           false],
-  ['t-yr-8plus',         'yr-8plus',          false],
-  ['t-required',         'required',          false],
-  ['t-continue-demo',    'continue-demo',     false],
-  ['t-step2',            'step2',             false],
-  ['t-instr-title',      'instr-title',       true],
-  ['t-instr-p1',         'instr-p1',          true],
-  ['t-instr-p2',         'instr-p2',          true],
-  ['t-instr-p3',         'instr-p3',          true],
-  ['t-instr-note',       'instr-note',        true],
-  ['t-ready',            'ready',             false],
-  ['t-step3',            'step3',             false],
-  ['t-gate-title',       'gate-title',        true],
-  ['t-gate-body',        'gate-body',         false],
-  ['t-start',            'start',             false],
-  ['t-loading',          'loading',           false],
-  ['t-preload-title',    'preload-title',     true],
-  ['t-preload-body',     'preload-body',      false],
-  ['t-label-gentle',     'label-gentle',      false],
-  ['t-label-rude',       'label-rude',        false],
-  ['t-confirm',          'confirm',           false],
-  ['t-complete',         'complete',          false],
-  ['t-thanks-title',     'thanks-title',      true],
-  ['t-thanks-body',      'thanks-body',       false],
-  ['t-close',            'close',             false],
-  ['t-break-label',      'break-label',       false],
-  ['t-break-title',      'break-title',       true],
-  ['t-break-body',       'break-body',        false],
-  ['t-break-continue',   'break-continue',    false],
+  ['t-study-label','study-label',true],['t-consent-title','consent-title',true],['t-consent-box','consent-box',true],
+  ['t-agree','agree',false],['t-disagree','disagree',false],['consent-error','consent-error',false],
+  ['t-continue-consent','continue-consent',false],['t-declined-title','declined-title',false],['t-declined-body','declined-body',false],
+  ['t-step1','step1',false],['t-demo-title','demo-title',true],['t-age-label','age-label',false],['age-error','age-error',false],
+  ['t-gender-label','gender-label',false],['gender-error','gender-error',false],['t-female','female',false],['t-male','male',false],
+  ['t-other','other',false],['t-prefernot','prefernot',false],['t-dance-label','dance-label',false],['dance-error','dance-error',false],
+  ['t-dance-no','dance-no',false],['t-dance-amateur','dance-amateur',false],['t-dance-preprof','dance-preprof',false],
+  ['t-dance-prof','dance-prof',false],['t-years-label','years-label',false],['years-error','years-error',false],
+  ['t-yr-lt1','yr-lt1',false],['t-yr-1to3','yr-1to3',false],['t-yr-4to7','yr-4to7',false],['t-yr-8plus','yr-8plus',false],
+  ['t-required','required',false],['t-continue-demo','continue-demo',false],['t-step2','step2',false],
+  ['t-instr-title','instr-title',true],['t-instr-p1','instr-p1',true],['t-instr-p2','instr-p2',true],
+  ['t-instr-p3','instr-p3',true],['t-instr-note','instr-note',true],['t-ready','ready',false],['t-step3','step3',false],
+  ['t-gate-title','gate-title',true],['t-gate-body','gate-body',false],['t-start','start',false],['t-loading','loading',false],
+  ['t-preload-title','preload-title',true],['t-preload-body','preload-body',false],['t-label-gentle','label-gentle',false],
+  ['t-label-rude','label-rude',false],['t-confirm','confirm',false],['t-complete','complete',false],
+  ['t-thanks-title','thanks-title',true],['t-thanks-body','thanks-body',false],['t-close','close',false],
+  ['t-break-label','break-label',false],['t-break-title','break-title',true],['t-break-body','break-body',false],
+  ['t-break-continue','break-continue',false],
 ];
 
 function applyTranslations() {
-  UI_MAP.forEach(([elId, key, isHtml]) => {
+  UI_MAP.forEach(([elId,key,isHtml]) => {
     const el = document.getElementById(elId);
     if (!el) return;
-    if (isHtml) el.innerHTML = tr(key);
-    else el.textContent = tr(key);
+    if (isHtml) el.innerHTML = tr(key); else el.textContent = tr(key);
   });
-  const ageInput = document.getElementById('age');
-  if (ageInput) ageInput.placeholder = tr('age-placeholder');
+  const a = document.getElementById('age');
+  if (a) a.placeholder = tr('age-placeholder');
 }
+function setLanguage(lang) { currentLang = lang; applyTranslations(); showScreen('screen-consent'); }
 
-function setLanguage(lang) {
-  currentLang = lang;
-  applyTranslations();
-  showScreen('screen-consent');
-}
-
-// ============================================================
-// CONFIG
-// ============================================================
 const VIDEO_CONFIGS = [
   { id: 'BRUSCO-1',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-1.webm'] },
   { id: 'BRUSCO-2',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-2.webm'] },
@@ -870,90 +680,49 @@ const VIDEO_CONFIGS = [
   { id: 'NEUTRO-40', src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/NEUTRO-40.webm'] }
 ];
 
-// ============================================================
-// STATE
-// ============================================================
 const state = {
-  subjectId: generateId(),
-  consent: null,
-  age: null,
-  gender: null,
-  dance: null,
-  years: null,
-  trialOrder: [],
-  currentTrial: 0,
-  currentBlock: 0,
-  ratings: [],
-  startTime: null,
-  trialStart: null,
+  subjectId: generateId(), consent: null, age: null, gender: null, dance: null, years: null,
+  trialOrder: [], currentTrial: 0, currentBlock: 0, ratings: [], startTime: null, trialStart: null,
 };
-
 const preloadedVideos = {};
 
-function generateId() {
-  return 'S_' + Date.now() + '_' + Math.random().toString(36).slice(2,7).toUpperCase();
-}
-
+function generateId() { return 'S_' + Date.now() + '_' + Math.random().toString(36).slice(2,7).toUpperCase(); }
 function shuffle(arr) {
   const a = [...arr];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
+  for (let i = a.length-1; i > 0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
   return a;
 }
-
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   window.scrollTo(0, 0);
 }
-
 function selectRadio(el, name, value) {
-  document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
-    r.closest('.radio-option').classList.remove('selected');
-  });
+  document.querySelectorAll(`input[name="${name}"]`).forEach(r => r.closest('.radio-option').classList.remove('selected'));
   el.classList.add('selected');
   const input = el.querySelector('input');
   if (input) input.checked = true;
   if (name === 'dance') {
-    const yearsField = document.getElementById('years-field');
-    yearsField.style.display = value !== 'no' ? 'block' : 'none';
-    if (value === 'no') {
-      document.querySelectorAll('input[name="years"]').forEach(r => {
-        r.closest('.radio-option').classList.remove('selected');
-      });
-    }
+    document.getElementById('years-field').style.display = value !== 'no' ? 'block' : 'none';
+    if (value === 'no') document.querySelectorAll('input[name="years"]').forEach(r => r.closest('.radio-option').classList.remove('selected'));
   }
 }
-
 function getRadioValue(name) {
-  const selected = document.querySelector(`.radio-option.selected input[name="${name}"]`);
-  if (selected) return selected.value;
-  const checked = document.querySelector(`input[name="${name}"]:checked`);
-  return checked ? checked.value : null;
+  const s = document.querySelector(`.radio-option.selected input[name="${name}"]`);
+  if (s) return s.value;
+  const c = document.querySelector(`input[name="${name}"]:checked`);
+  return c ? c.value : null;
 }
+function showError(id, show) { const el = document.getElementById(id); if (el) el.classList.toggle('visible', show); }
 
-function showError(id, show) {
-  const el = document.getElementById(id);
-  if (el) el.classList.toggle('visible', show);
-}
-
-// ============================================================
-// CONSENT
-// ============================================================
 function submitConsent() {
   const val = getRadioValue('consent');
   if (!val) { showError('consent-error', true); return; }
-  showError('consent-error', false);
-  state.consent = val;
+  showError('consent-error', false); state.consent = val;
   if (val === 'disagree') { showScreen('screen-declined'); return; }
   showScreen('screen-demo');
 }
 
-// ============================================================
-// DEMOGRAPHICS
-// ============================================================
 function submitDemo() {
   let valid = true;
   const age = parseInt(document.getElementById('age').value);
@@ -969,20 +738,15 @@ function submitDemo() {
     const years = getRadioValue('years');
     if (!years) { showError('years-error', true); valid = false; }
     else { showError('years-error', false); state.years = years; }
-  } else {
-    state.years = 'N/A';
-  }
+  } else { state.years = 'N/A'; }
   if (!valid) return;
   showScreen('screen-instructions');
 }
 
-// ============================================================
-// GATE → PRELOAD → TASK
-// ============================================================
 function goToGate() { showScreen('screen-gate'); }
 
 function startTask() {
-  state.trialOrder = shuffle(VIDEO_CONFIGS.map((_, i) => i));
+  state.trialOrder = shuffle(VIDEO_CONFIGS.map((_,i) => i));
   state.startTime = Date.now();
   state.currentBlock = 0;
   startBlock();
@@ -994,74 +758,55 @@ function startBlock() {
   const start = block * BLOCK_SIZE;
   const end = Math.min(start + BLOCK_SIZE, state.trialOrder.length);
   const blockIndices = state.trialOrder.slice(start, end);
-  const blockTotal = blockIndices.length;
   const totalBlocks = Math.ceil(state.trialOrder.length / BLOCK_SIZE);
-
   document.getElementById('preload-fill').style.width = '0%';
   document.getElementById('preload-text').textContent = '';
   const titleEl = document.getElementById('t-preload-title');
   if (titleEl) titleEl.innerHTML = currentLang === 'it'
     ? `Blocco <em>${block+1} di ${totalBlocks}</em> — Caricamento…`
     : `Block <em>${block+1} of ${totalBlocks}</em> — Loading…`;
-
   showScreen('screen-preload');
-  preloadBlock(blockIndices, blockTotal);
+  preloadBlock(blockIndices, blockIndices.length);
 }
 
 function preloadBlock(blockIndices, blockTotal) {
-  let loaded = 0;
-  let blockDone = false;
+  const EAGER = 3;
+  const eagerIndices = blockIndices.slice(0, EAGER);
+  let loaded = 0, blockDone = false;
   const fill = document.getElementById('preload-fill');
   const txt = document.getElementById('preload-text');
-  const pool = document.getElementById('video-pool');
 
   const advance = () => {
-    if (loaded >= blockTotal && !blockDone) {
+    if (loaded >= eagerIndices.length && !blockDone) {
       blockDone = true;
+      state.currentBlockIndices = blockIndices;
       setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
     }
   };
 
-  blockIndices.forEach(idx => {
+  eagerIndices.forEach(idx => {
     const cfg = VIDEO_CONFIGS[idx];
-
-    // Already preloaded — just count it
     if (preloadedVideos[cfg.id]) {
       loaded++;
-      fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
+      fill.style.width = Math.round((loaded / eagerIndices.length) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
-      advance();
-      return;
+      advance(); return;
     }
-
     const vid = document.createElement('video');
-    vid.muted = true;
-    vid.loop = true;
-    vid.preload = 'auto';
-    vid.playsInline = true;
-
+    vid.muted = true; vid.loop = true; vid.preload = 'auto'; vid.playsInline = true;
     cfg.src.forEach(url => {
       if (!url) return;
       const source = document.createElement('source');
-      source.src = url;
-      source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
+      source.src = url; source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
       vid.appendChild(source);
     });
-
-    // SAFARI FIX: add to hidden pool immediately so Safari never frees the buffer
-    pool.appendChild(vid);
-
     let done = false;
     const onDone = () => {
-      if (done) return;
-      done = true;
-      loaded++;
-      fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
+      if (done) return; done = true; loaded++;
+      fill.style.width = Math.round((loaded / eagerIndices.length) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
-      preloadedVideos[cfg.id] = vid;
-      advance();
+      preloadedVideos[cfg.id] = vid; advance();
     };
-
     vid.addEventListener('canplaythrough', onDone, { once: true });
     vid.addEventListener('loadeddata', onDone, { once: true });
     vid.addEventListener('error', onDone, { once: true });
@@ -1069,55 +814,44 @@ function preloadBlock(blockIndices, blockTotal) {
   });
 }
 
-// ============================================================
-// TASK
-// ============================================================
 function renderTrial() {
   const n = state.currentTrial;
   const total = state.trialOrder.length;
   const cfg = VIDEO_CONFIGS[state.trialOrder[n]];
-
-  document.getElementById('video-counter').textContent =
-    tr('video-of').replace('{n}', n + 1).replace('{total}', total);
+  document.getElementById('video-counter').textContent = tr('video-of').replace('{n}', n+1).replace('{total}', total);
   document.getElementById('task-progress').style.width = ((n / total) * 100) + '%';
   document.getElementById('rating-slider').value = 50;
-
   const wrapper = document.getElementById('video-wrapper');
   wrapper.innerHTML = '';
-
   if (!cfg.src[0] && !cfg.src[1]) {
-    wrapper.innerHTML = `<div class="video-placeholder">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <polygon points="5 3 19 12 5 21 5 3"/>
-      </svg>
-      <span>${cfg.id}</span></div>`;
+    wrapper.innerHTML = `<div class="video-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${cfg.id}</span></div>`;
   } else {
     const vid = preloadedVideos[cfg.id];
     if (vid) {
-      // SAFARI FIX: hide all videos in pool, then make current one visible in place
-      // without moving it in the DOM (moving resets buffer on Safari)
-      const pool = document.getElementById('video-pool');
-      Array.from(pool.children).forEach(v => {
-        v.style.position = '';
-        v.style.visibility = 'hidden';
-      });
-      // Position this video to overlap the wrapper
-      const rect = wrapper.getBoundingClientRect();
-      vid.style.position = 'fixed';
-      vid.style.left = rect.left + 'px';
-      vid.style.top = rect.top + 'px';
-      vid.style.width = rect.width + 'px';
-      vid.style.height = rect.height + 'px';
-      vid.style.objectFit = 'contain';
-      vid.style.visibility = 'visible';
-      vid.style.zIndex = '10';
-      vid.style.borderRadius = '16px';
-      vid.style.background = '#000';
+      vid.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+      wrapper.appendChild(vid);
       vid.play().catch(() => {});
     }
   }
-
   state.trialStart = Date.now();
+  preloadAhead(n + 1, 2);
+}
+
+function preloadAhead(fromTrial, count) {
+  for (let i = fromTrial; i < Math.min(fromTrial + count, state.trialOrder.length); i++) {
+    const cfg = VIDEO_CONFIGS[state.trialOrder[i]];
+    if (preloadedVideos[cfg.id]) continue;
+    const vid = document.createElement('video');
+    vid.muted = true; vid.loop = true; vid.preload = 'auto'; vid.playsInline = true;
+    cfg.src.forEach(url => {
+      if (!url) return;
+      const source = document.createElement('source');
+      source.src = url; source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
+      vid.appendChild(source);
+    });
+    preloadedVideos[cfg.id] = vid;
+    vid.load();
+  }
 }
 
 function unlockSlider() {}
@@ -1127,22 +861,12 @@ function confirmRating() {
   const cfg = VIDEO_CONFIGS[state.trialOrder[n]];
   const rating = parseInt(document.getElementById('rating-slider').value);
   const rt = Date.now() - state.trialStart;
-
-  state.ratings.push({ trial: n + 1, video_id: cfg.id, rating_0_100: rating, response_time_ms: rt });
-
-  // Pause current video and hide it (stays in pool, never moves)
+  state.ratings.push({ trial: n+1, video_id: cfg.id, rating_0_100: rating, response_time_ms: rt });
   const vid = preloadedVideos[cfg.id];
-  if (vid) {
-    vid.pause();
-    vid.style.visibility = 'hidden';
-    vid.style.position = '';
-  }
-
+  if (vid) vid.pause();
   state.currentTrial++;
-
   const BLOCK_SIZE = 40;
   const nextBlock = Math.floor(state.currentTrial / BLOCK_SIZE);
-
   if (state.currentTrial >= state.trialOrder.length) {
     finishTask();
   } else if (nextBlock > state.currentBlock) {
@@ -1150,16 +874,10 @@ function confirmRating() {
     showScreen('screen-break');
   } else {
     document.getElementById('screen-task').classList.remove('active');
-    setTimeout(() => {
-      document.getElementById('screen-task').classList.add('active');
-      renderTrial();
-    }, 50);
+    setTimeout(() => { document.getElementById('screen-task').classList.add('active'); renderTrial(); }, 50);
   }
 }
 
-// ============================================================
-// DEVICE FINGERPRINT
-// ============================================================
 function getDeviceFingerprint() {
   const ua = navigator.userAgent || '';
   const screen_res = `${screen.width}x${screen.height}x${screen.colorDepth}`;
@@ -1168,53 +886,23 @@ function getDeviceFingerprint() {
   const cores = navigator.hardwareConcurrency || '';
   const raw = `${ua}|${screen_res}|${timezone}|${lang}|${cores}`;
   let hash = 0;
-  for (let i = 0; i < raw.length; i++) {
-    hash = ((hash << 5) - hash) + raw.charCodeAt(i);
-    hash |= 0;
-  }
-  return {
-    fingerprint_hash: Math.abs(hash).toString(36).toUpperCase(),
-    user_agent: ua,
-    screen: screen_res,
-    timezone: timezone,
-    browser_language: lang,
-    cpu_cores: cores,
-  };
+  for (let i = 0; i < raw.length; i++) { hash = ((hash << 5) - hash) + raw.charCodeAt(i); hash |= 0; }
+  return { fingerprint_hash: Math.abs(hash).toString(36).toUpperCase(), user_agent: ua, screen: screen_res, timezone, browser_language: lang, cpu_cores: cores };
 }
 
-// ============================================================
-// FINISH
-// ============================================================
 function finishTask() {
   const device = getDeviceFingerprint();
   const output = {
-    subject_id: state.subjectId,
-    language: currentLang,
-    session_timestamp: new Date().toISOString(),
-    device_fingerprint: device.fingerprint_hash,
-    user_agent: device.user_agent,
-    screen: device.screen,
-    timezone: device.timezone,
-    browser_language: device.browser_language,
-    cpu_cores: device.cpu_cores,
-    demographics: {
-      age: state.age,
-      gender: state.gender,
-      dance_experience: state.dance,
-      years_of_practice: state.years,
-    },
+    subject_id: state.subjectId, language: currentLang, session_timestamp: new Date().toISOString(),
+    device_fingerprint: device.fingerprint_hash, user_agent: device.user_agent, screen: device.screen,
+    timezone: device.timezone, browser_language: device.browser_language, cpu_cores: device.cpu_cores,
+    demographics: { age: state.age, gender: state.gender, dance_experience: state.dance, years_of_practice: state.years },
     trial_order: state.trialOrder.map(i => VIDEO_CONFIGS[i].id),
     ratings: state.ratings,
   };
-
   const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyJhCjQXC2QxMcBLDXKjANKPn_QrE4RiKlDx-ootkuCqbtWofeDjaWGikjdQowJFg2-OQ/exec';
-  fetch(SHEET_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(output)
-  }).catch(err => console.warn('Data send failed:', err));
-
+  fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(output) })
+    .catch(err => console.warn('Data send failed:', err));
   showScreen('screen-thanks');
 }
 </script>
