@@ -770,7 +770,7 @@ function startBlock() {
 }
 
 function preloadBlock(blockIndices, blockTotal) {
-  const EAGER = 3;
+  const EAGER = 6;
   const eagerIndices = blockIndices.slice(0, EAGER);
   let loaded = 0, blockDone = false;
   const fill = document.getElementById('preload-fill');
@@ -834,7 +834,7 @@ function renderTrial() {
     }
   }
   state.trialStart = Date.now();
-  preloadAhead(n + 1, 2);
+  preloadAhead(n + 1, 5);
 }
 
 function preloadAhead(fromTrial, count) {
