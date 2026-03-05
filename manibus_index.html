@@ -1094,9 +1094,25 @@ function renderTrial() {
   } else {
     const vid = preloadedVideos[cfg.id];
     if (vid) {
-      // SAFARI FIX: video stays in pool; we show it via CSS positioning instead of moving it
-      vid.style.cssText = 'width:100%;height:100%;object-fit:contain;position:absolute;top:0;left:0;';
-      wrapper.appendChild(vid);
+      // SAFARI FIX: hide all videos in pool, then make current one visible in place
+      // without moving it in the DOM (moving resets buffer on Safari)
+      const pool = document.getElementById('video-pool');
+      Array.from(pool.children).forEach(v => {
+        v.style.position = '';
+        v.style.visibility = 'hidden';
+      });
+      // Position this video to overlap the wrapper
+      const rect = wrapper.getBoundingClientRect();
+      vid.style.position = 'fixed';
+      vid.style.left = rect.left + 'px';
+      vid.style.top = rect.top + 'px';
+      vid.style.width = rect.width + 'px';
+      vid.style.height = rect.height + 'px';
+      vid.style.objectFit = 'contain';
+      vid.style.visibility = 'visible';
+      vid.style.zIndex = '10';
+      vid.style.borderRadius = '16px';
+      vid.style.background = '#000';
       vid.play().catch(() => {});
     }
   }
@@ -1114,11 +1130,12 @@ function confirmRating() {
 
   state.ratings.push({ trial: n + 1, video_id: cfg.id, rating_0_100: rating, response_time_ms: rt });
 
-  // Pause current video and move it back to pool
+  // Pause current video and hide it (stays in pool, never moves)
   const vid = preloadedVideos[cfg.id];
   if (vid) {
     vid.pause();
-    document.getElementById('video-pool').appendChild(vid);
+    vid.style.visibility = 'hidden';
+    vid.style.position = '';
   }
 
   state.currentTrial++;
