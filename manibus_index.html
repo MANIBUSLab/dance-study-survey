@@ -676,6 +676,10 @@ const TRANSLATIONS = {
     'thanks-body':      'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.',
     'close':            'Puoi ora chiudere questa finestra.',
     'video-of':         'Video {n} di {total}',
+    'break-label':      'Intervallo',
+    'break-title':      'Breve <em>pausa</em>',
+    'break-body':       'Ottimo lavoro! Hai completato la sezione. Ora prenditi un breve momento di pausa se ne hai bisogno, poi premi Continua per ricominciare.',
+    'break-continue':   'Continua →',
     'loaded-of':        '{n} / {total} caricati',
   }
 };
@@ -1066,6 +1070,7 @@ function preloadBlock(blockIndices, blockTotal) {
       if (loaded >= blockTotal) setTimeout(() => { showScreen('screen-task'); renderTrial(); }, 400);
     };
     vid.addEventListener('canplaythrough', onDone, { once: true });
+    vid.addEventListener('loadeddata', onDone, { once: true });
     vid.addEventListener('error', onDone, { once: true });
     vid.load();
   });
@@ -1114,6 +1119,7 @@ function preloadVideos() {
     };
 
     vid.addEventListener('canplaythrough', onDone, { once: true });
+    vid.addEventListener('loadeddata', onDone, { once: true });
     vid.addEventListener('error', onDone, { once: true });
     vid.load();
   });
