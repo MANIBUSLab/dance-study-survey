@@ -825,16 +825,51 @@ function renderTrial() {
   wrapper.innerHTML = '';
   if (!cfg.src[0] && !cfg.src[1]) {
     wrapper.innerHTML = `<div class="video-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${cfg.id}</span></div>`;
-  } else {
-    const vid = preloadedVideos[cfg.id];
-    if (vid) {
-      vid.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
-      wrapper.appendChild(vid);
-      vid.play().catch(() => {});
-    }
+ } else {
+    showVideo(cfg, wrapper, n);
   }
+
   state.trialStart = Date.now();
-  preloadAhead(n + 1, 5);
+}
+
+function showVideo(cfg, wrapper, trialIndex) {
+  const doShow = (v) => {
+    v.style.cssText = 'width:100%;height:100%;object-fit:contain;display:block;';
+    wrapper.innerHTML = '';
+    wrapper.appendChild(v);
+    v.play().catch(() => {});
+    state.trialStart = Date.now();
+    preloadAhead(trialIndex + 1, 5);
+  };
+
+  let vid = preloadedVideos[cfg.id];
+
+  if (!vid) {
+    vid = document.createElement('video');
+    vid.muted = true; vid.loop = true; vid.preload = 'auto'; vid.playsInline = true;
+    cfg.src.forEach(url => {
+      if (!url) return;
+      const source = document.createElement('source');
+      source.src = url; source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
+      vid.appendChild(source);
+    });
+    preloadedVideos[cfg.id] = vid;
+    vid.load();
+  }
+
+  if (vid.readyState >= 3) {
+    doShow(vid);
+  } else {
+    wrapper.innerHTML = `<div class="video-placeholder">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.4">
+        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
+          <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="1s" repeatCount="indefinite"/>
+        </path>
+      </svg>
+    </div>`;
+    vid.addEventListener('canplaythrough', () => { doShow(vid); }, { once: true });
+    vid.addEventListener('loadeddata', () => { doShow(vid); }, { once: true });
+  }
 }
 
 function preloadAhead(fromTrial, count) {
