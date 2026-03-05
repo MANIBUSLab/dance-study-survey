@@ -872,14 +872,10 @@ function showVideo(cfg, wrapper, trialIndex) {
     shown = true;
     doShow(vid);
   };
-
-  vid.addEventListener('canplaythrough', tryShow, { once: true });
-  vid.addEventListener('loadeddata', tryShow, { once: true });
+ 
   vid.addEventListener('timeupdate', tryShow, { once: true });
-
-  vid.play().then(() => {
-    tryShow();
-  }).catch(() => {});
+  vid.addEventListener('canplaythrough', tryShow, { once: true });
+  vid.play().catch(() => {});
 }
 
 function preloadAhead(fromTrial, count) {
@@ -910,8 +906,6 @@ function confirmRating() {
   const vid = preloadedVideos[cfg.id];
   if (vid) {
     vid.pause();
-    vid.src = '';
-    vid.load();
     delete preloadedVideos[cfg.id];
   }
   state.currentTrial++;
