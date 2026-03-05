@@ -770,7 +770,7 @@ function startBlock() {
 }
 
 function preloadBlock(blockIndices, blockTotal) {
-  const EAGER = 6;
+  const EAGER = 3;
   const eagerIndices = blockIndices.slice(0, EAGER);
   let loaded = 0, blockDone = false;
   const fill = document.getElementById('preload-fill');
@@ -839,7 +839,7 @@ function showVideo(cfg, wrapper, trialIndex) {
     wrapper.appendChild(v);
     v.play().catch(() => {});
     state.trialStart = Date.now();
-    preloadAhead(trialIndex + 1, 5);
+    preloadAhead(trialIndex + 1, 3);
   };
 
   let vid = preloadedVideos[cfg.id];
@@ -906,9 +906,6 @@ function confirmRating() {
   const vid = preloadedVideos[cfg.id];
   if (vid) {
     vid.pause();
-    // Rimuovi le source e chiama load() per forzare Safari a liberare il buffer
-    while (vid.firstChild) vid.removeChild(vid.firstChild);
-    vid.load();
     delete preloadedVideos[cfg.id];
   }
   state.currentTrial++;
