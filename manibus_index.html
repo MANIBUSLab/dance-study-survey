@@ -1062,7 +1062,10 @@ function preloadBlock(blockIndices, blockTotal) {
       source.type = url.endsWith('.webm') ? 'video/webm' : 'video/mp4';
       vid.appendChild(source);
     });
+    let done = false;
     const onDone = () => {
+      if (done) return;
+      done = true;
       loaded++;
       fill.style.width = Math.round((loaded / blockTotal) * 100) + '%';
       txt.textContent = tr('loaded-of').replace('{n}', loaded).replace('{total}', blockTotal);
