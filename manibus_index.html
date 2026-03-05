@@ -906,6 +906,9 @@ function confirmRating() {
   const vid = preloadedVideos[cfg.id];
   if (vid) {
     vid.pause();
+    // Rimuovi le source e chiama load() per forzare Safari a liberare il buffer
+    while (vid.firstChild) vid.removeChild(vid.firstChild);
+    vid.load();
     delete preloadedVideos[cfg.id];
   }
   state.currentTrial++;
