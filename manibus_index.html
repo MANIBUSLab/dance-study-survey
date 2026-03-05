@@ -908,7 +908,12 @@ function confirmRating() {
   const rt = Date.now() - state.trialStart;
   state.ratings.push({ trial: n+1, video_id: cfg.id, rating_0_100: rating, response_time_ms: rt });
   const vid = preloadedVideos[cfg.id];
-  if (vid) vid.pause();
+  if (vid) {
+    vid.pause();
+    vid.src = '';
+    vid.load();
+    delete preloadedVideos[cfg.id];
+  }
   state.currentTrial++;
   const BLOCK_SIZE = 40;
   const nextBlock = Math.floor(state.currentTrial / BLOCK_SIZE);
