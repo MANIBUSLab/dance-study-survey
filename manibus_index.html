@@ -1053,7 +1053,7 @@ function finishTask() {
     trial_order: state.trialOrder.map(i => VIDEO_CONFIGS[i].id),
     ratings: state.ratings,
   };
-  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbyJhCjQXC2QxMcBLDXKjANKPn_QrE4RiKlDx-ootkuCqbtWofeDjaWGikjdQowJFg2-OQ/exec';
+  const SHEET_URL = 'https://script.google.com/macros/s/AKfycbwk8H-5Uqni-nJ1Y9JF30mQDiO6zjJIGzeDYun2j0sW_BH7_v3wLExaPeVcq96lW-Jr3w/exec'; 
   fetch(SHEET_URL, { method:'POST', mode:'no-cors', headers:{'Content-Type':'application/json'}, body: JSON.stringify(output) })
     .catch(err => console.warn('Data send failed:', err));
   showScreen('screen-thanks');
