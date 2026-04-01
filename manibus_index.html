@@ -289,6 +289,20 @@
     box-shadow: 0 8px 24px rgba(200,184,255,0.12);
   }
   .lang-flag { font-size: 36px; line-height: 1; }
+
+  /* Animated reveal for conditional sub-fields */
+  .sub-field {
+    overflow: hidden;
+    max-height: 0;
+    opacity: 0;
+    transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin-top 0.3s ease;
+    margin-top: 0;
+  }
+  .sub-field.visible {
+    max-height: 200px;
+    opacity: 1;
+    margin-top: 20px;
+  }
 </style>
 </head>
 <body>
@@ -392,6 +406,8 @@
       </div>
       <p class="error-msg" id="dance-error"></p>
     </div>
+
+    <!-- Years of practice (shown when dance != no) -->
     <div class="field" id="years-field" style="display:none;">
       <label id="t-years-label"></label>
       <div class="radio-group">
@@ -409,7 +425,29 @@
         </label>
       </div>
       <p class="error-msg" id="years-error"></p>
+
+      <!-- Still practicing? (shown after years answer) -->
+      <div id="still-practicing-field" style="margin-top: 28px; display:none;">
+        <label id="t-still-label" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:10px; letter-spacing:0.05em;"></label>
+        <div class="radio-group">
+          <label class="radio-option" onclick="selectRadio(this,'still_practicing','yes'); handleStillPracticing('yes')">
+            <input type="radio" name="still_practicing" value="yes"><span class="radio-dot"></span><span id="t-still-yes"></span>
+          </label>
+          <label class="radio-option" onclick="selectRadio(this,'still_practicing','no'); handleStillPracticing('no')">
+            <input type="radio" name="still_practicing" value="no"><span class="radio-dot"></span><span id="t-still-no"></span>
+          </label>
+        </div>
+        <p class="error-msg" id="still-error"></p>
+
+        <!-- Age when stopped (shown only if still_practicing == no) -->
+        <div class="sub-field" id="age-stopped-field">
+          <label id="t-age-stopped-label" style="display:block; font-size:13px; color:var(--text-muted); margin-bottom:10px; letter-spacing:0.05em;"></label>
+          <input type="number" id="age-stopped" min="1" max="120" style="width:100%;">
+          <p class="error-msg" id="age-stopped-error"></p>
+        </div>
+      </div>
     </div>
+
     <p class="required-note" id="t-required"></p>
     <div class="btn-row">
       <button class="btn btn-primary" onclick="submitDemo()" id="t-continue-demo"></button>
@@ -513,10 +551,16 @@
 <script>
 const TRANSLATIONS = {
   en: {
-    'study-label':'Movement Perception Study','consent-title':'Before we <em>begin</em>','consent-box':'The present study is conducted in accordance with the Ethics Committee of the University of Turin. The collected data will be processed in accordance with privacy regulations (Pursuant to EU Regulation 2016/679, the General Data Protection Regulation (GDPR), concerning the protection of natural persons with regard to the processing of personal data and the free movement of such data.). No personal data will be disclosed.<br><br>Please confirm that you agree to take part in the study.','agree':'I agree','disagree':'I do not agree','consent-error':'Please select an option to continue.','continue-consent':'Continue →','declined-title':'Thank you for your time','declined-body':'You have chosen not to participate in this study. You may close this window.','step1':'Step 1 of 3','demo-title':'A few questions <em>about you</em>','age-label':'How old are you?','age-placeholder':'Your age','age-error':'Please enter a valid age (18–120).','gender-label':'What is your gender?','gender-error':'Please select an option.','female':'Female','male':'Male','other':'Other','prefernot':'Prefer not to say','dance-label':'Have you ever practiced dance?','dance-error':'Please select an option.','dance-no':'No','dance-amateur':'Yes, in an amateur context','dance-preprof':'Yes, at a pre-professional level','dance-prof':'Yes, at a professional level','years-label':'How many years have you practiced dance?','years-error':'Please select an option.','yr-lt1':'Less than 1 year','yr-1to3':'1 to 3 years','yr-4to7':'4 to 7 years','yr-8plus':'8 or more years','required':'All fields are required.','continue-demo':'Continue →','step2':'Step 2 of 3','instr-title':'What you\'ll <em>do</em>','instr-p1':'You will watch a series of short dance video clips. Each clip lasts approximately 1–2 seconds and will loop continuously while you make your rating.','instr-p2':'After each video, move the slider to indicate which feelings this movement evokes in you — from <strong style="color:var(--gentle)">Gentle</strong> on the left to <strong style="color:var(--rude)">Rude</strong> on the right.','instr-p3':'There are no right or wrong answers. We are interested in your spontaneous, personal perception. Please rate each video independently.','instr-note':'The study should take no more than 10 minutes to be completed. Please make sure you are in a quiet and comfortable room.','ready':'I\'m ready →','step3':'Step 3 of 3 — Task','gate-title':'Ready to <em>start</em>?','gate-body':'Videos will begin playing automatically. Tap the button below to unlock video playback on your device and start the task.','start':'Start Task','loading':'Loading','preload-title':'Preparing your <em>videos</em>…','preload-body':'Please wait while we load all video clips.','label-gentle':'← Gentle','label-rude':'Rude →','confirm':'Confirm rating →','complete':'Study complete','thanks-title':'Thank you for <em>participating</em>','thanks-body':'Your responses have been recorded. Your contribution is valuable to our research on dance perception.','close':'You may now close this window.','video-of':'Video {n} of {total}','break-label':'Short break','break-title':'Take a <em>moment</em>','break-body':'Great work! Take a short break if you need, then press Continue when you are ready.','break-continue':'Continue →',
+    'study-label':'Movement Perception Study','consent-title':'Before we <em>begin</em>','consent-box':'The present study is conducted in accordance with the Ethics Committee of the University of Turin. The collected data will be processed in accordance with privacy regulations (Pursuant to EU Regulation 2016/679, the General Data Protection Regulation (GDPR), concerning the protection of natural persons with regard to the processing of personal data and the free movement of such data.). No personal data will be disclosed.<br><br>Please confirm that you agree to take part in the study.','agree':'I agree','disagree':'I do not agree','consent-error':'Please select an option to continue.','continue-consent':'Continue →','declined-title':'Thank you for your time','declined-body':'You have chosen not to participate in this study. You may close this window.','step1':'Step 1 of 3','demo-title':'A few questions <em>about you</em>','age-label':'How old are you?','age-placeholder':'Your age','age-error':'Please enter a valid age (18–120).','gender-label':'What is your gender?','gender-error':'Please select an option.','female':'Female','male':'Male','other':'Other','prefernot':'Prefer not to say','dance-label':'Have you ever practiced dance?','dance-error':'Please select an option.','dance-no':'No','dance-amateur':'Yes, in an amateur context','dance-preprof':'Yes, at a pre-professional level','dance-prof':'Yes, at a professional level','years-label':'How many years have you practiced dance?','years-error':'Please select an option.','yr-lt1':'Less than 1 year','yr-1to3':'1 to 3 years','yr-4to7':'4 to 7 years','yr-8plus':'8 or more years',
+    'still-label':'Are you still practicing dance?','still-yes':'Yes','still-no':'No','still-error':'Please select an option.',
+    'age-stopped-label':'How old were you when you stopped?','age-stopped-placeholder':'Your age at the time','age-stopped-error':'Please enter a valid age (numbers only).',
+    'required':'All fields are required.','continue-demo':'Continue →','step2':'Step 2 of 3','instr-title':'What you\'ll <em>do</em>','instr-p1':'You will watch a series of short dance video clips. Each clip lasts approximately 1–2 seconds and will loop continuously while you make your rating.','instr-p2':'After each video, move the slider to indicate which feelings this movement evokes in you — from <strong style="color:var(--gentle)">Gentle</strong> on the left to <strong style="color:var(--rude)">Rude</strong> on the right.','instr-p3':'There are no right or wrong answers. We are interested in your spontaneous, personal perception. Please rate each video independently.','instr-note':'The study should take no more than 10 minutes to be completed. Please make sure you are in a quiet and comfortable room.','ready':'I\'m ready →','step3':'Step 3 of 3 — Task','gate-title':'Ready to <em>start</em>?','gate-body':'Videos will begin playing automatically. Tap the button below to unlock video playback on your device and start the task.','start':'Start Task','loading':'Loading','preload-title':'Preparing your <em>videos</em>…','preload-body':'Please wait while we load all video clips.','label-gentle':'← Gentle','label-rude':'Rude →','confirm':'Confirm rating →','complete':'Study complete','thanks-title':'Thank you for <em>participating</em>','thanks-body':'Your responses have been recorded. Your contribution is valuable to our research on dance perception.','close':'You may now close this window.','video-of':'Video {n} of {total}','break-label':'Short break','break-title':'Take a <em>moment</em>','break-body':'Great work! Take a short break if you need, then press Continue when you are ready.','break-continue':'Continue →',
   },
   it: {
-    'study-label':'Studio sulla Percezione del Movimento','consent-title':'Prima di <em>iniziare</em>','consent-box':'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.','agree':'Acconsento','disagree':'Non acconsento','consent-error':'Seleziona un\'opzione per continuare.','continue-consent':'Continua →','declined-title':'Grazie per il tuo tempo','declined-body':'Hai scelto di non partecipare a questo studio. Puoi chiudere questa finestra.','step1':'Passo 1 di 3','demo-title':'Alcune domande <em>su di te</em>','age-label':'Quanti anni hai?','age-placeholder':'La tua età','age-error':'Inserisci un\'età valida (18–120).','gender-label':'Qual è il tuo genere?','gender-error':'Seleziona un\'opzione.','female':'Femmina','male':'Maschio','other':'Altro','prefernot':'Preferisco non rispondere','dance-label':'Hai mai praticato danza?','dance-error':'Seleziona un\'opzione.','dance-no':'No','dance-amateur':'Sì, in un contesto amatoriale','dance-preprof':'Sì, a livello pre-professionale','dance-prof':'Sì, a livello professionale','years-label':'Per quanti anni hai praticato danza?','years-error':'Seleziona un\'opzione.','yr-lt1':'Meno di 1 anno','yr-1to3':'Da 1 a 3 anni','yr-4to7':'Da 4 a 7 anni','yr-8plus':'8 anni o più','required':'Tutti i campi sono obbligatori.','continue-demo':'Continua →','step2':'Passo 2 di 3','instr-title':'Cosa <em>farai</em>','instr-p1':'Guarderai una serie di brevi video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.','instr-p2':'Dopo ogni video, sposta il cursore per indicare quali sensazioni ti trasmette questo movimento — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.','instr-p3':'Non esistono risposte giuste o sbagliate. Siamo interessati alla tua percezione spontanea e personale. Valuta ogni video in modo indipendente.','instr-note':'Lo studio non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.','ready':'Sono prontə →','step3':'Passo 3 di 3 — Compito','gate-title':'Prontə a <em>iniziare</em>?','gate-body':'I video saranno riprodotti automaticamente. Tocca il pulsante qui sotto per avviare il compito.','start':'Inizia','loading':'Caricamento','preload-title':'Preparazione dei <em>video</em>…','preload-body':'Attendi mentre carichiamo tutti i video.','label-gentle':'← Gentile','label-rude':'Brusco →','confirm':'Conferma valutazione →','complete':'Studio completato','thanks-title':'Grazie per aver <em>partecipato</em>','thanks-body':'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.','close':'Puoi ora chiudere questa finestra.','video-of':'Video {n} di {total}','break-label':'Intervallo','break-title':'Breve <em>pausa</em>','break-body':'Ottimo lavoro! Se ne hai bisogno prenditi un breve momento di pausa, poi premi Continua per ricominciare.','break-continue':'Continua →',
+    'study-label':'Studio sulla Percezione del Movimento','consent-title':'Prima di <em>iniziare</em>','consent-box':'Il presente studio è condotto in conformità con il Comitato Etico dell\'Università di Torino. I dati raccolti saranno trattati nel rispetto della normativa sulla privacy (ai sensi del Regolamento UE 2016/679, il Regolamento Generale sulla Protezione dei Dati (GDPR), relativo alla protezione delle persone fisiche con riguardo al trattamento dei dati personali e alla libera circolazione di tali dati). Nessun dato personale verrà divulgato.<br><br>Conferma il tuo consenso a partecipare allo studio.','agree':'Acconsento','disagree':'Non acconsento','consent-error':'Seleziona un\'opzione per continuare.','continue-consent':'Continua →','declined-title':'Grazie per il tuo tempo','declined-body':'Hai scelto di non partecipare a questo studio. Puoi chiudere questa finestra.','step1':'Passo 1 di 3','demo-title':'Alcune domande <em>su di te</em>','age-label':'Quanti anni hai?','age-placeholder':'La tua età','age-error':'Inserisci un\'età valida (18–120).','gender-label':'Qual è il tuo genere?','gender-error':'Seleziona un\'opzione.','female':'Femmina','male':'Maschio','other':'Altro','prefernot':'Preferisco non rispondere','dance-label':'Hai mai praticato danza?','dance-error':'Seleziona un\'opzione.','dance-no':'No','dance-amateur':'Sì, in un contesto amatoriale','dance-preprof':'Sì, a livello pre-professionale','dance-prof':'Sì, a livello professionale','years-label':'Per quanti anni hai praticato danza?','years-error':'Seleziona un\'opzione.','yr-lt1':'Meno di 1 anno','yr-1to3':'Da 1 a 3 anni','yr-4to7':'Da 4 a 7 anni','yr-8plus':'8 anni o più',
+    'still-label':'Stai ancora praticando danza?','still-yes':'Sì','still-no':'No','still-error':'Seleziona un\'opzione.',
+    'age-stopped-label':'Quanti anni avevi quando hai smesso?','age-stopped-placeholder':'La tua età in quel momento','age-stopped-error':'Inserisci un\'età valida (solo numeri).',
+    'required':'Tutti i campi sono obbligatori.','continue-demo':'Continua →','step2':'Passo 2 di 3','instr-title':'Cosa <em>farai</em>','instr-p1':'Guarderai una serie di brevi video di danza. Ogni clip dura circa 1–2 secondi e si ripeterà in loop mentre esprimi la tua valutazione.','instr-p2':'Dopo ogni video, sposta il cursore per indicare quali sensazioni ti trasmette questo movimento — da <strong style="color:var(--gentle)">Gentile</strong> a sinistra a <strong style="color:var(--rude)">Brusco</strong> a destra.','instr-p3':'Non esistono risposte giuste o sbagliate. Siamo interessati alla tua percezione spontanea e personale. Valuta ogni video in modo indipendente.','instr-note':'Lo studio non dovrebbe richiedere più di 10 minuti. Assicurati di essere in una stanza tranquilla e confortevole.','ready':'Sono prontə →','step3':'Passo 3 di 3 — Compito','gate-title':'Prontə a <em>iniziare</em>?','gate-body':'I video saranno riprodotti automaticamente. Tocca il pulsante qui sotto per avviare il compito.','start':'Inizia','loading':'Caricamento','preload-title':'Preparazione dei <em>video</em>…','preload-body':'Attendi mentre carichiamo tutti i video.','label-gentle':'← Gentile','label-rude':'Brusco →','confirm':'Conferma valutazione →','complete':'Studio completato','thanks-title':'Grazie per aver <em>partecipato</em>','thanks-body':'Le tue risposte sono state registrate. Il tuo contributo è prezioso per la nostra ricerca sulla percezione della danza.','close':'Puoi ora chiudere questa finestra.','video-of':'Video {n} di {total}','break-label':'Intervallo','break-title':'Breve <em>pausa</em>','break-body':'Ottimo lavoro! Se ne hai bisogno prenditi un breve momento di pausa, poi premi Continua per ricominciare.','break-continue':'Continua →',
   }
 };
 
@@ -533,6 +577,9 @@ const UI_MAP = [
   ['t-dance-no','dance-no',false],['t-dance-amateur','dance-amateur',false],['t-dance-preprof','dance-preprof',false],
   ['t-dance-prof','dance-prof',false],['t-years-label','years-label',false],['years-error','years-error',false],
   ['t-yr-lt1','yr-lt1',false],['t-yr-1to3','yr-1to3',false],['t-yr-4to7','yr-4to7',false],['t-yr-8plus','yr-8plus',false],
+  ['t-still-label','still-label',false],['still-error','still-error',false],
+  ['t-still-yes','still-yes',false],['t-still-no','still-no',false],
+  ['t-age-stopped-label','age-stopped-label',false],['age-stopped-error','age-stopped-error',false],
   ['t-required','required',false],['t-continue-demo','continue-demo',false],['t-step2','step2',false],
   ['t-instr-title','instr-title',true],['t-instr-p1','instr-p1',true],['t-instr-p2','instr-p2',true],
   ['t-instr-p3','instr-p3',true],['t-instr-note','instr-note',true],['t-ready','ready',false],['t-step3','step3',false],
@@ -552,8 +599,23 @@ function applyTranslations() {
   });
   const a = document.getElementById('age');
   if (a) a.placeholder = tr('age-placeholder');
+  const as = document.getElementById('age-stopped');
+  if (as) as.placeholder = tr('age-stopped-placeholder');
 }
 function setLanguage(lang) { currentLang = lang; applyTranslations(); showScreen('screen-consent'); }
+
+// ---- NEW: handle still-practicing toggle ----
+function handleStillPracticing(val) {
+  const field = document.getElementById('age-stopped-field');
+  if (val === 'no') {
+    field.classList.add('visible');
+    document.getElementById('age-stopped').focus();
+  } else {
+    field.classList.remove('visible');
+    document.getElementById('age-stopped').value = '';
+    showError('age-stopped-error', false);
+  }
+}
 
 const VIDEO_CONFIGS = [
   { id: 'BRUSCO-1',  src: [null, 'https://cdn.jsdelivr.net/gh/MANIBUSLab/dance-study-survey@main/BRUSCO-1.webm'] },
@@ -680,6 +742,7 @@ const VIDEO_CONFIGS = [
 
 const state = {
   subjectId: generateId(), consent: null, age: null, gender: null, dance: null, years: null,
+  still_practicing: null, age_stopped: null,
   trialOrder: [], currentTrial: 0, currentBlock: 0, ratings: [], startTime: null, trialStart: null,
 };
 const preloadedVideos = {};
@@ -701,8 +764,17 @@ function selectRadio(el, name, value) {
   const input = el.querySelector('input');
   if (input) input.checked = true;
   if (name === 'dance') {
-    document.getElementById('years-field').style.display = value !== 'no' ? 'block' : 'none';
-    if (value === 'no') document.querySelectorAll('input[name="years"]').forEach(r => r.closest('.radio-option').classList.remove('selected'));
+    const hasDance = value !== 'no';
+    document.getElementById('years-field').style.display = hasDance ? 'block' : 'none';
+    if (!hasDance) {
+      document.querySelectorAll('input[name="years"]').forEach(r => r.closest('.radio-option').classList.remove('selected'));
+      document.getElementById('still-practicing-field').style.display = 'none';
+      document.getElementById('age-stopped-field').classList.remove('visible');
+      document.querySelectorAll('input[name="still_practicing"]').forEach(r => r.closest('.radio-option').classList.remove('selected'));
+    }
+  }
+  if (name === 'years') {
+    document.getElementById('still-practicing-field').style.display = 'block';
   }
 }
 function getRadioValue(name) {
@@ -732,14 +804,54 @@ function submitDemo() {
   const dance = getRadioValue('dance');
   if (!dance) { showError('dance-error', true); valid = false; }
   else { showError('dance-error', false); state.dance = dance; }
+
   if (dance && dance !== 'no') {
     const years = getRadioValue('years');
     if (!years) { showError('years-error', true); valid = false; }
     else { showError('years-error', false); state.years = years; }
-  } else { state.years = 'N/A'; }
+
+    // Validate still_practicing
+    const still = getRadioValue('still_practicing');
+    if (!still) { showError('still-error', true); valid = false; }
+    else {
+      showError('still-error', false);
+      state.still_practicing = still;
+      if (still === 'no') {
+        // Validate age-stopped
+        const rawStopped = document.getElementById('age-stopped').value.trim();
+        const ageStopped = parseInt(rawStopped);
+        if (!rawStopped || isNaN(ageStopped) || ageStopped < 1 || ageStopped > 120) {
+          showError('age-stopped-error', true); valid = false;
+        } else {
+          showError('age-stopped-error', false);
+          state.age_stopped = ageStopped;
+        }
+      } else {
+        state.age_stopped = null;
+      }
+    }
+  } else {
+    state.years = 'N/A';
+    state.still_practicing = 'N/A';
+    state.age_stopped = null;
+  }
+
   if (!valid) return;
   showScreen('screen-instructions');
 }
+
+// Prevent non-numeric input in age-stopped field
+document.addEventListener('DOMContentLoaded', () => {
+  const ageStopped = document.getElementById('age-stopped');
+  if (ageStopped) {
+    ageStopped.addEventListener('keypress', (e) => {
+      if (!/[0-9]/.test(e.key)) e.preventDefault();
+    });
+    ageStopped.addEventListener('input', () => {
+      ageStopped.value = ageStopped.value.replace(/[^0-9]/g, '');
+    });
+  }
+});
 
 function goToGate() { showScreen('screen-gate'); }
 
@@ -819,10 +931,9 @@ function renderTrial() {
   wrapper.innerHTML = '';
   if (!cfg.src[0] && !cfg.src[1]) {
     wrapper.innerHTML = `<div class="video-placeholder"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>${cfg.id}</span></div>`;
- } else {
+  } else {
     showVideo(cfg, wrapper, n);
   }
-
   state.trialStart = Date.now();
 }
 
@@ -851,7 +962,6 @@ function showVideo(cfg, wrapper, trialIndex) {
     vid.load();
   }
 
-  // Mostra spinner subito
   wrapper.innerHTML = `<div class="video-placeholder">
     <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:0.4">
       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
@@ -866,7 +976,7 @@ function showVideo(cfg, wrapper, trialIndex) {
     shown = true;
     doShow(vid);
   };
- 
+
   vid.addEventListener('timeupdate', tryShow, { once: true });
   vid.addEventListener('canplaythrough', tryShow, { once: true });
   vid.play().catch(() => {});
@@ -934,7 +1044,12 @@ function finishTask() {
     subject_id: state.subjectId, language: currentLang, session_timestamp: new Date().toISOString(),
     device_fingerprint: device.fingerprint_hash, user_agent: device.user_agent, screen: device.screen,
     timezone: device.timezone, browser_language: device.browser_language, cpu_cores: device.cpu_cores,
-    demographics: { age: state.age, gender: state.gender, dance_experience: state.dance, years_of_practice: state.years },
+    demographics: {
+      age: state.age, gender: state.gender,
+      dance_experience: state.dance, years_of_practice: state.years,
+      still_practicing: state.still_practicing,
+      age_stopped: state.age_stopped
+    },
     trial_order: state.trialOrder.map(i => VIDEO_CONFIGS[i].id),
     ratings: state.ratings,
   };
